@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentWPF" Version="0.8.0" />
     <PackageReference Include="MaterialDesignThemes" Version="3.2.0" />
   </ItemGroup>
 

@@ -18,19 +18,22 @@
     <materialDesign:Card
         Margin="13,7,13,23"
         materialDesign:ShadowAssist.ShadowDepth="Depth4"
-        MouseLeftButtonDown="MouseMoveWindow"
         UniformCornerRadius="15">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="35" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <Grid Grid.Row="0" Background="LightSlateGray">
+            <Grid
+                Grid.Row="0"
+                Background="LightSlateGray"
+                MouseLeftButtonDown="MouseMoveWindow">
                 <StackPanel
+                    Margin="15,0,0,0"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
                     Orientation="Horizontal">
-                    <Image Source="Resources/Youtube_Logo.png"/>
+                    <Image Width="155" Source="pack://application:,,,/Resources/Youtube_Logo.png" />
                 </StackPanel>
             </Grid>
             <MyViews:MainView Grid.Row="1" Margin="15" />
