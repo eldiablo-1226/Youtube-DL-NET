@@ -7,8 +7,9 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     d:DesignHeight="450"
     d:DesignWidth="800"
+    Background="White"
     mc:Ignorable="d">
     <Grid>
-        
+        <TextBlock Text="Test" />
     </Grid>
 </UserControl>

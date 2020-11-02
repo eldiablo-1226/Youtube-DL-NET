@@ -15,12 +15,8 @@
     WindowStyle="None"
     mc:Ignorable="d">
 
-    <Window.Resources>
-        <BitmapImage x:Key="MyImageSource" UriSource="Resources/Youtube_Logo.png" />
-    </Window.Resources>
-
     <materialDesign:Card
-        Margin="13,7,13,23"
+        Margin="15,10,15,25"
         materialDesign:ShadowAssist.ShadowDepth="Depth4"
         UniformCornerRadius="15">
         <Grid>
@@ -30,18 +26,35 @@
             </Grid.RowDefinitions>
             <Grid
                 Grid.Row="0"
-                Background="LightSlateGray"
+                Background="White"
                 MouseLeftButtonDown="MouseMoveWindow">
                 <StackPanel
                     Margin="15,0,0,0"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
                     Orientation="Horizontal">
-                    <Image
-                        x:Name="LogoImage"
-                        Width="120"
-                        Source="{StaticResource MyImageSource}" />
+                    <Image Margin="10" Source="{StaticResource Icons8_play_button_19318}" />
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        FontSize="15"
+                        FontWeight="Bold"
+                        Text="Youtube" />
                 </StackPanel>
+                <StackPanel
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Orientation="Horizontal">
+                    <Grid Margin="0,0,15,0" MouseDown="MouseCloseClick">
+                        <materialDesign:PackIcon Kind="WindowClose" />
+                    </Grid>
+                </StackPanel>
+                <Line
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Bottom"
+                    Opacity="0.2"
+                    Stroke="Gray"
+                    StrokeThickness="1"
+                    X1="770" />
             </Grid>
             <MyViews:MainView Grid.Row="1" Margin="15" />
         </Grid>

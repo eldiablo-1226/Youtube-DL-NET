@@ -34,5 +34,11 @@ namespace Youtube_DL
         {
             DragMove();
         }
+
+        private void MouseCloseClick(object sender, MouseButtonEventArgs e)
+        {
+            if(e.ChangedButton == MouseButton.Left)
+                this.Close();
+        }
     }
 }
