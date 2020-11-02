@@ -40,5 +40,11 @@ namespace Youtube_DL
             if(e.ChangedButton == MouseButton.Left)
                 this.Close();
         }
+
+        private void MouseHideClick(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left && e.ClickCount == 2)
+                this.WindowState = WindowState.Minimized;
+        }
     }
 }
