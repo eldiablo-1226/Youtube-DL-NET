@@ -34,7 +34,7 @@
                 <DrawingGroup.Children>
                     <DrawingGroup>
                         <DrawingGroup.Children>
-                            <GeometryDrawing Brush="#CC0101" Pen="{x:Null}">
+                            <GeometryDrawing Brush="#707072" Pen="{x:Null}">
                                 <GeometryDrawing.Geometry>
                                     <PathGeometry Figures="M7.9785156,5.9804688A2.0002,2.0002,0,0,0,6.5859375,9.4140625L12.171875,15 6.5859375,20.585938A2.0002,2.0002,0,1,0,9.4140625,23.414062L15,17.828125 20.585938,23.414062A2.0002,2.0002,0,1,0,23.414062,20.585938L17.828125,15 23.414062,9.4140625A2.0002,2.0002,0,0,0,21.960938,5.9804688A2.0002,2.0002,0,0,0,20.585938,6.5859375L15,12.171875 9.4140625,6.5859375A2.0002,2.0002,0,0,0,7.9785156,5.9804688z" FillRule="Nonzero" />
                                 </GeometryDrawing.Geometry>

@@ -10,6 +10,7 @@
   <ItemGroup>
     <PackageReference Include="FluentWPF" Version="0.8.0" />
     <PackageReference Include="MaterialDesignThemes" Version="3.2.0" />
+    <PackageReference Include="PropertyChanged.Fody" Version="3.2.10" />
   </ItemGroup>
 
   <ItemGroup>
