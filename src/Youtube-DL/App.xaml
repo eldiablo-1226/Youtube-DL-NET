@@ -14,7 +14,7 @@
                     SecondaryColor="Red" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/FluentWPF;component/Styles/Controls.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/resources/Logo.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Resources/Logo.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
