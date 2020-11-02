@@ -59,15 +59,5 @@ namespace Youtube_DL.Properties {
                 resourceCulture = value;
             }
         }
-        
-        /// <summary>
-        ///   Поиск локализованного ресурса типа System.Byte[].
-        /// </summary>
-        internal static byte[] Youtube_Logo {
-            get {
-                object obj = ResourceManager.GetObject("Youtube_Logo", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
     }
 }

@@ -25,6 +25,11 @@ namespace Youtube_DL
             InitializeComponent();
         }
 
+        public override void BeginInit()
+        {
+            base.BeginInit();
+        }
+
         private void MouseMoveWindow(object sender, MouseButtonEventArgs e)
         {
             DragMove();
