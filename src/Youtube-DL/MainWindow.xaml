@@ -60,7 +60,7 @@
                     StrokeThickness="1"
                     X1="770" />
             </Grid>
-            <MyViews:MainView Grid.Row="1" Margin="15" />
+            <MyViews:MainView Grid.Row="1"/>
         </Grid>
     </materialDesign:Card>
 </Window>
