@@ -42,7 +42,7 @@
                     Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
                     TextWrapping="Wrap"
                     VerticalScrollBarVisibility="Auto" />
-                <materialDesign:Snackbar Margin="0,0,0,5" MessageQueue="{Binding Snackbar}" />
+
             </Grid>
 
             <StackPanel
@@ -64,7 +64,6 @@
                     </Grid>
                 </Button>
             </StackPanel>
-
         </Grid>
         <Grid Grid.Column="1">
             <materialDesign:Card Background="Red" UniformCornerRadius="15">
@@ -79,9 +78,10 @@
                         </ItemsControl>
                     </ScrollViewer>
                 </Grid>
-
             </materialDesign:Card>
         </Grid>
-
+        <materialDesign:Snackbar
+            Grid.Column="1"
+            MessageQueue="{Binding Snackbar}" />
     </Grid>
 </UserControl>

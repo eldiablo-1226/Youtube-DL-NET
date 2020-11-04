@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Youtube_DL.Helper
+﻿namespace Youtube_DL.Helper
 {
     internal static class EmptyArray<T>
     {

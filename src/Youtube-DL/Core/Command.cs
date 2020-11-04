@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows.Input;
 
 namespace Youtube_DL.Core
 {
     public sealed class Command : ICommand
     {
-        readonly Action<object> _execute;
+        private readonly Action<object> _execute;
 
         public Command(Action<object> execute)
         {

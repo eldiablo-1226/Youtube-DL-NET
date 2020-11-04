@@ -17,7 +17,7 @@ namespace Youtube_DL
 
         private void MouseCloseClick(object sender, MouseButtonEventArgs e)
         {
-            if(e.ChangedButton == MouseButton.Left)
+            if (e.ChangedButton == MouseButton.Left)
                 this.Close();
         }
 

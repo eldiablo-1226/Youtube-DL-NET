@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Text;
+﻿using System.ComponentModel;
 
 namespace Youtube_DL.Model
 {
-    class YoutubeVideoModel : INotifyPropertyChanged
+    internal class YoutubeVideoModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
         public YoutubeVideoModel()
         {
-
         }
     }
 }
