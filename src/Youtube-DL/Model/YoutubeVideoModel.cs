@@ -1,4 +1,7 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using VideoLibrary;
 
 namespace Youtube_DL.Model
 {
@@ -6,8 +9,13 @@ namespace Youtube_DL.Model
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public YoutubeVideoModel()
+        private const string ImageUrl = "https://img.youtube.com/vi/{VideoId}/hqdefault.jpg";
+
+        public string urls { get; set; }
+
+        public YoutubeVideoModel(IEnumerable<YouTubeVideo> VideoInfo)
         {
+
         }
     }
 }
