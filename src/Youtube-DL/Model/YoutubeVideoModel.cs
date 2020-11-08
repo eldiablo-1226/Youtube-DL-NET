@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using VideoLibrary;
+using NYoutubeDL.Models;
 
 namespace Youtube_DL.Model
 {
@@ -9,13 +11,19 @@ namespace Youtube_DL.Model
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private const string ImageUrl = "https://img.youtube.com/vi/{VideoId}/hqdefault.jpg";
+        public string Image { get; set; }
+        public string Title { get; set; }
+        public string URL { get; set; }
+        public List<FormatDownloadInfo> Formats { get; set; }
 
-        public string urls { get; set; }
-
-        public YoutubeVideoModel(IEnumerable<YouTubeVideo> VideoInfo)
+        public YoutubeVideoModel([NotNull]DownloadInfo Info)
         {
+            var AllInfo = Info as VideoDownloadInfo;
 
+            Image = AllInfo.Thumbnail;
+            Title = AllInfo.Title;
+            Formats = AllInfo.Formats;
+            URL = AllInfo.WebpageUrl;
         }
     }
 }

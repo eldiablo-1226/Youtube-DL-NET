@@ -19,7 +19,7 @@
         <Grid Grid.Column="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
+                <RowDefinition Height="75" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
@@ -29,26 +29,23 @@
                 FontSize="30"
                 FontWeight="Bold"
                 Foreground="Red"
-                Text="Добавить видео" />
+                Text="Добавить видео"/>
+                
 
-            <Grid Grid.Row="1" Margin="10,10,25,10">
+            <Grid Grid.Row="1" Margin="10,25,20,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
                 <TextBox
-                    x:Name="YoutubeUrls"
-                    Height="240"
-                    VerticalAlignment="Top"
+                    Name="YoutubeUrls"
                     materialDesign:HintAssist.Hint="URL"
                     AcceptsReturn="True"
                     Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
-                    TextWrapping="Wrap"
-                    VerticalScrollBarVisibility="Auto" />
-
-            </Grid>
-
-            <StackPanel
-                Grid.Row="2"
-                HorizontalAlignment="Center"
-                Orientation="Horizontal">
+                    TextWrapping="Wrap"/>
                 <Button
+                    Grid.Column="1"
+                    Margin="10,0,0,0"
                     Command="{Binding AddButton}"
                     CommandParameter="{Binding Text, ElementName=YoutubeUrls}"
                     Style="{StaticResource MaterialDesignOutlinedButton}"
@@ -62,50 +59,93 @@
                             Value="0" />
                     </Grid>
                 </Button>
+            </Grid>
+
+            <StackPanel
+                Grid.Row="2"
+                HorizontalAlignment="Center"
+                Orientation="Horizontal">
+                
             </StackPanel>
         </Grid>
         <Grid Grid.Column="1">
             <materialDesign:Card Background="Red" UniformCornerRadius="15">
-                <Grid Margin="20,0">
+                <Grid Margin="10,0">
                     <ScrollViewer VerticalScrollBarVisibility="Hidden">
-                        <StackPanel>
-                            <materialDesign:Card
-                                Height="100"
-                                Margin="10,20"
-                                Background="White"
-                                UniformCornerRadius="15">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="0.8*" />
-                                        <ColumnDefinition />
-                                    </Grid.ColumnDefinitions>
 
-                                    <Border
-                                        Grid.Column="0"
-                                        Margin="5"
-                                        BorderBrush="Black"
-                                        BorderThickness="8"
-                                        CornerRadius="8">
-                                        <Image Source="{Binding Image}" Stretch="Fill" />
-                                    </Border>
-
-                                    <TextBlock
-                                        Grid.Column="1"
-                                        VerticalAlignment="Center"
-                                        FontWeight="Bold"
-                                        Text="{Binding Title}" />
-
-                                </Grid>
-                            </materialDesign:Card>
-                        </StackPanel>
-
-                        <!--<ItemsControl ItemsSource="{Binding MainVideoList}">
+                        <ItemsControl ItemsSource="{Binding MainVideoList}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
+                                    <materialDesign:Card
+                                        Height="100"
+                                        Margin="10,20"
+                                        Background="White"
+                                        UniformCornerRadius="15">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="0.6*" />
+                                                <ColumnDefinition />
+                                            </Grid.ColumnDefinitions>
 
+                                            <Grid Grid.Column="0" Margin="6">
+                                                <Border
+                                                    Name="Mask"
+                                                    Background="Gray"
+                                                    CornerRadius="13" />
+                                                <Grid>
+                                                    <ProgressBar
+                                                        IsIndeterminate="True"
+                                                        Style="{StaticResource MaterialDesignCircularProgressBar}"
+                                                        Value="0" />
+                                                    <Image
+                                                        Name="Receiver"
+                                                        Source="{Binding Image}"
+                                                        Stretch="UniformToFill" />
+                                                    <Grid.OpacityMask>
+                                                        <VisualBrush Visual="{Binding ElementName=Mask}" />
+                                                    </Grid.OpacityMask>
+                                                </Grid>
+                                            </Grid>
+
+                                            <Grid Grid.Column="1">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="*" />
+                                                    <RowDefinition Height="1*" />
+                                                </Grid.RowDefinitions>
+                                                <TextBlock
+                                                    Grid.Row="0"
+                                                    Margin="10,10,5,5"
+                                                    FontWeight="Bold"
+                                                    Text="{Binding Title}"
+                                                    TextAlignment="Left"
+                                                    TextTrimming="CharacterEllipsis"
+                                                    TextWrapping="Wrap" />
+                                                <StackPanel
+                                                    Grid.Row="1"
+                                                    Margin="20,0"
+                                                    HorizontalAlignment="Right"
+                                                    Orientation="Horizontal">
+
+                                                    <ComboBox Margin="0,0,20,0" ItemsSource="{Binding VideoResolution}" />
+
+                                                    <ToggleButton Style="{StaticResource MaterialDesignActionToggleButton}" ToolTip="MaterialDesignActionLightToggleButton">
+                                                        <ToggleButton.Content>
+                                                            <materialDesign:PackIcon Foreground="White" Kind="DownloadOutline" />
+                                                        </ToggleButton.Content>
+                                                        <materialDesign:ToggleButtonAssist.OnContent>
+                                                            <TextBlock Foreground="White" Text="80%" />
+                                                        </materialDesign:ToggleButtonAssist.OnContent>
+                                                    </ToggleButton>
+                                                </StackPanel>
+
+                                            </Grid>
+
+
+                                        </Grid>
+                                    </materialDesign:Card>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
-                        </ItemsControl>-->
+                        </ItemsControl>
                     </ScrollViewer>
                 </Grid>
             </materialDesign:Card>

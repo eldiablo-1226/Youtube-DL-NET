@@ -6,34 +6,26 @@ using System.ComponentModel;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using VideoLibrary;
+using NYoutubeDL;
 using Youtube_DL.Core;
-using Youtube_DL.Helper;
 using Youtube_DL.Model;
 
 namespace Youtube_DL.ViewModel
 {
     internal class MainViewModel : INotifyPropertyChanged
     {
-
-        #region ForTest
-
-        public string Image { get; } = "https://img.youtube.com/vi/ujjSnIChB0g/hqdefault.jpg";
-        public string Title { get; } = "iPhone 12 Pro vs 11 Pro: НА САМОМ ДЕЛЕ";
-
-
-        #endregion
-
+        YoutubeDL ydlClient = new YoutubeDL(@"C:\Users\shaxz\source\repos\ConsoleApp2\bin\Debug\netcoreapp3.1\youtube-dl.exe");
         public event PropertyChangedEventHandler PropertyChanged;
 
         #region Property
-        private YouTube YouTubeClient = YouTube.Default;
         public SnackbarMessageQueue Snackbar { get; set; } = new SnackbarMessageQueue();
 
         ///AddButton
         public Visibility ButtonTextVisible { get; set; } = Visibility.Visible;
         public Visibility ButtonIsLoading { get; set; } = Visibility.Hidden;
-        private bool Isloading
+
+        private bool _isloading = false;
+        public bool Isloading
         {
             set
             {
@@ -41,13 +33,17 @@ namespace Youtube_DL.ViewModel
                 {
                     ButtonTextVisible = Visibility.Hidden;
                     ButtonIsLoading = Visibility.Visible;
+                    _isloading = true;
                 }
                 else
                 {
                     ButtonTextVisible = Visibility.Visible;
                     ButtonIsLoading = Visibility.Hidden;
+                    _isloading = false;
                 }
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Isloading)));
             }
+            get => _isloading;
         }
 
         public ObservableCollection<YoutubeVideoModel> MainVideoList { get; set; }
@@ -69,51 +65,38 @@ namespace Youtube_DL.ViewModel
         private async void AddToDownload(string urls)
         {
             if (string.IsNullOrEmpty(urls))
+                Snackbar.Enqueue("Пожалуйста введите ссылку !!!");
+            else
             {
-                if (Clipboard.ContainsText())
-                    await AddVideo(Clipboard.GetText().Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries));
+                if (CheckURL(urls))
+                {
+                    try
+                    {
+                        await AddVideo(urls);
+                    }
+                    catch (Exception e)
+                    {
+                        Snackbar.Enqueue(e.Message);
+                    }
+                }
                 else
-                    Snackbar.Enqueue("Пожалуйста введите ссылку !!!");
-            }
-            else
-            {
-                await AddVideo(urls.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries));
+                    Snackbar.Enqueue("Ссылку не валидна !!!");
             }
         }
 
-        private async Task AddVideo(string[] urls)
+        private async Task AddVideo(string urls)
         {
-            if (!VideoCheck(urls)) Snackbar.Enqueue("Ссылки не валидны !");
-            else
-            {
-                Isloading = true;
-                foreach (var url in urls)
-                {
-                    IEnumerable<YouTubeVideo> VideoInfoList = await YouTubeClient.GetAllVideosAsync(url);
-                    MainVideoList.Add(new YoutubeVideoModel(VideoInfoList));
-                }
-                Isloading = false;
-            }
-        }
-
-        private bool VideoCheck(string[] urls)
-        {
-            foreach (var url in urls)
-            {
-                if (!CheckURL(url))
-                {
-                    return false;
-                }
-            }
-            return true;
+            var YI = await ydlClient.GetDownloadInfoAsync(urls);
+            MainVideoList.Add(new YoutubeVideoModel(YI));
         }
 
         private bool CheckURL(string videoUri)
         {
             videoUri = new StringBuilder(videoUri).Replace("youtu.be/", "youtube.com/watch?v=").Replace("youtube.com/embed/", "youtube.com/watch?v=").Replace("/v/", "/watch?v=").Replace("/watch#", "/watch?").ToString();
-            if (!new Query(videoUri).TryGetValue("v"))
-                return false;
-            return true;
+
+            if (videoUri.Contains("youtube.com/watch?v="))
+                return true;
+            return false;
         }
     }
 }
