@@ -6,7 +6,12 @@
     <RootNamespace>Youtube_DL</RootNamespace>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>YoutubeIco.ico</ApplicationIcon>
+    <AssemblyName>Youtube-Downloader</AssemblyName>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="YoutubeIco.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="MaterialDesignThemes" Version="3.2.0" />
@@ -16,6 +21,19 @@
 
   <ItemGroup>
     <Folder Include="Properties\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Resources\youtube-dl.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="YoutubeIco.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Resources\Logo.xaml">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Page>
   </ItemGroup>
 
 </Project>

@@ -14,7 +14,7 @@ namespace Youtube_DL.ViewModel
 {
     internal class MainViewModel : INotifyPropertyChanged
     {
-        YoutubeDL ydlClient = new YoutubeDL(@"C:\Users\shaxz\source\repos\ConsoleApp2\bin\Debug\netcoreapp3.1\youtube-dl.exe");
+        YoutubeDL ydlClient = new YoutubeDL(@"Resources\youtube-dl.exe");
         public event PropertyChangedEventHandler PropertyChanged;
 
         #region Property
@@ -86,8 +86,10 @@ namespace Youtube_DL.ViewModel
 
         private async Task AddVideo(string urls)
         {
+            Isloading = true;
             var YI = await ydlClient.GetDownloadInfoAsync(urls);
             MainVideoList.Add(new YoutubeVideoModel(YI));
+            Isloading = false;
         }
 
         private bool CheckURL(string videoUri)
