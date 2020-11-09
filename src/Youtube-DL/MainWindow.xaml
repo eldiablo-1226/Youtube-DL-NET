@@ -20,47 +20,43 @@
         Margin="15,10,15,25"
         materialDesign:ShadowAssist.ShadowDepth="Depth4"
         UniformCornerRadius="15">
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="35" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <Grid
-                Grid.Row="0"
-                Background="White"
-                MouseDown="MouseHideClick"
-                MouseLeftButtonDown="MouseMoveWindow">
-                <StackPanel
-                    Margin="15,0,0,0"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Center"
-                    Orientation="Horizontal">
-                    <Image Margin="10" Source="{StaticResource YoutubeLogo}" />
-                    <TextBlock
+        <materialDesign:DialogHost Identifier="MainDialog">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="35" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid
+                    Grid.Row="0"
+                    Background="White"
+                    MouseDown="MouseHideClick"
+                    MouseLeftButtonDown="MouseMoveWindow">
+                    <StackPanel
+                        Margin="15,0,0,0"
+                        HorizontalAlignment="Left"
                         VerticalAlignment="Center"
-                        FontSize="15"
-                        FontWeight="Bold"
-                        Text="Youtube" />
-                </StackPanel>
-                <StackPanel
-                    Margin="0,0,15,0"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Center"
-                    Orientation="Horizontal">
-                    <Image
-                        Margin="0,12"
-                        MouseDown="MouseCloseClick"
-                        Source="{StaticResource CloseIco}" />
-                </StackPanel>
-                <Line
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Bottom"
-                    Opacity="0.2"
-                    Stroke="Gray"
-                    StrokeThickness="1"
-                    X1="770" />
+                        Orientation="Horizontal">
+                        <Image Margin="10" Source="{StaticResource YoutubeLogo}" />
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            FontSize="15"
+                            FontWeight="Bold"
+                            Text="Youtube" />
+                    </StackPanel>
+                    <StackPanel
+                        Margin="0,0,15,0"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Orientation="Horizontal">
+                        <Image
+                            Margin="0,12"
+                            MouseDown="MouseCloseClick"
+                            Source="{StaticResource CloseIco}" />
+                    </StackPanel>
+                </Grid>
+                <MyViews:MainView Grid.Row="1" />
             </Grid>
-            <MyViews:MainView Grid.Row="1" />
-        </Grid>
+        </materialDesign:DialogHost>
+
     </materialDesign:Card>
 </Window>

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -72,10 +73,15 @@ namespace Youtube_DL.ViewModel
                 {
                     try
                     {
+                        if(MainVideoList.Any(x=> x.URL == urls))
+                            throw new ArgumentException(message:"Это ссылка уже добавлена");
+
                         await AddVideo(urls);
                     }
                     catch (Exception e)
                     {
+                        if(Isloading)
+                            Isloading = false;
                         Snackbar.Enqueue(e.Message);
                     }
                 }
@@ -87,8 +93,10 @@ namespace Youtube_DL.ViewModel
         private async Task AddVideo(string urls)
         {
             Isloading = true;
+
             var YI = await ydlClient.GetDownloadInfoAsync(urls);
-            MainVideoList.Add(new YoutubeVideoModel(YI));
+            MainVideoList.Add(new YoutubeVideoModel(YI, urls));
+
             Isloading = false;
         }
 

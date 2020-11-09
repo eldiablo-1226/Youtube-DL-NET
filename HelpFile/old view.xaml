@@ -1,0 +1,157 @@
+<Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="75" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <TextBlock
+                Grid.Row="0"
+                Margin="15,3,0,10"
+                FontSize="30"
+                FontWeight="Bold"
+                Foreground="Red"
+                Text="Добавить видео" />
+
+
+            <Grid Grid.Row="1" Margin="10,25,20,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBox
+                    Name="YoutubeUrls"
+                    materialDesign:HintAssist.Hint="URL"
+                    AcceptsReturn="True"
+                    Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}" />
+                <Button
+                    Grid.Column="1"
+                    Margin="10,0,0,0"
+                    Command="{Binding AddButton}"
+                    CommandParameter="{Binding Text, ElementName=YoutubeUrls}"
+                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                    ToolTip="MaterialDesignOutlinedButton">
+                    <Grid>
+                        <TextBlock Text="Добавить" Visibility="{Binding ButtonTextVisible}" />
+                        <ProgressBar
+                            IsIndeterminate="True"
+                            Style="{StaticResource MaterialDesignCircularProgressBar}"
+                            Visibility="{Binding ButtonIsLoading}"
+                            Value="0" />
+                    </Grid>
+                </Button>
+            </Grid>
+
+            <StackPanel
+                Grid.Row="2"
+                HorizontalAlignment="Center"
+                Orientation="Horizontal" />
+        </Grid>
+        <Grid Grid.Column="1">
+            <materialDesign:Card Background="Red" UniformCornerRadius="15">
+                <Grid Margin="10,0">
+                    <ScrollViewer VerticalScrollBarVisibility="Hidden">
+
+                        <ItemsControl ItemsSource="{Binding MainVideoList}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <materialDesign:Card
+                                        Height="100"
+                                        Margin="6,15"
+                                        Background="White"
+                                        UniformCornerRadius="15">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="0.6*" />
+                                                <ColumnDefinition />
+                                            </Grid.ColumnDefinitions>
+
+                                            <Grid Grid.Column="0" Margin="6,8">
+                                                <Border
+                                                    Name="Mask"
+                                                    Background="Gray"
+                                                    CornerRadius="13" />
+                                                <Grid>
+                                                    <ProgressBar
+                                                        IsIndeterminate="True"
+                                                        Style="{StaticResource MaterialDesignCircularProgressBar}"
+                                                        Value="0" />
+                                                    <Image
+                                                        Name="Receiver"
+                                                        Source="{Binding Image}"
+                                                        Stretch="UniformToFill" />
+                                                    <Grid.OpacityMask>
+                                                        <VisualBrush Visual="{Binding ElementName=Mask}" />
+                                                    </Grid.OpacityMask>
+                                                </Grid>
+                                            </Grid>
+
+                                            <Grid Grid.Column="1">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="*" />
+                                                    <RowDefinition Height="1*" />
+                                                </Grid.RowDefinitions>
+                                                <TextBlock
+                                                    Grid.Row="0"
+                                                    Margin="10,10,5,5"
+                                                    FontWeight="Bold"
+                                                    Text="{Binding Title}"
+                                                    TextAlignment="Left"
+                                                    TextTrimming="CharacterEllipsis"
+                                                    TextWrapping="Wrap" />
+
+                                                <Grid Grid.Row="1">
+                                                    <StackPanel
+                                                        HorizontalAlignment="Center"
+                                                        Orientation="Horizontal"
+                                                        Visibility="{Binding IsNotVisible}">
+                                                        <ComboBox
+                                                            Margin="0,0,10,0"
+                                                            FontSize="11"
+                                                            ItemsSource="{Binding Formats}"
+                                                            SelectedItem="{Binding SelectedIteam}" />
+                                                        <Button
+                                                            Margin="0,0,10,0"
+                                                            Command="{Binding Download}"
+                                                            Content="{materialDesign:PackIcon Kind=DownloadOutline}"
+                                                            Style="{StaticResource MaterialDesignOutlinedButton}"
+                                                            ToolTip="MaterialDesignOutlinedButton" />
+                                                    </StackPanel>
+                                                    <Grid Visibility="{Binding IsVisible}">
+
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="*" />
+                                                            <ColumnDefinition Width="Auto" />
+                                                        </Grid.ColumnDefinitions>
+
+                                                        <ProgressBar
+                                                            Grid.Column="0"
+                                                            Margin="7,0,10,0"
+                                                            Value="{Binding DownloadSize}" />
+                                                        <Button
+                                                            Grid.Column="1"
+                                                            Margin="0,0,10,0"
+                                                            Command="{Binding CancelDownload}"
+                                                            Content="{Binding IconClose}"
+                                                            Style="{StaticResource MaterialDesignOutlinedButton}"
+                                                            ToolTip="MaterialDesignOutlinedButton" />
+                                                    </Grid>
+                                                </Grid>
+
+                                            </Grid>
+                                        </Grid>
+                                    </materialDesign:Card>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Grid>
+            </materialDesign:Card>
+        </Grid>
+        <materialDesign:Snackbar Grid.Column="1" MessageQueue="{Binding Snackbar}" />
+    </Grid>
