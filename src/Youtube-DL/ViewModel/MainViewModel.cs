@@ -10,6 +10,7 @@ using System.Windows;
 using NYoutubeDL;
 using Youtube_DL.Core;
 using Youtube_DL.Model;
+using Youtube_DL.View;
 
 namespace Youtube_DL.ViewModel
 {
@@ -21,31 +22,7 @@ namespace Youtube_DL.ViewModel
         #region Property
         public SnackbarMessageQueue Snackbar { get; set; } = new SnackbarMessageQueue();
 
-        ///AddButton
-        public Visibility ButtonTextVisible { get; set; } = Visibility.Visible;
-        public Visibility ButtonIsLoading { get; set; } = Visibility.Hidden;
-
-        private bool _isloading = false;
-        public bool Isloading
-        {
-            set
-            {
-                if (value)
-                {
-                    ButtonTextVisible = Visibility.Hidden;
-                    ButtonIsLoading = Visibility.Visible;
-                    _isloading = true;
-                }
-                else
-                {
-                    ButtonTextVisible = Visibility.Visible;
-                    ButtonIsLoading = Visibility.Hidden;
-                    _isloading = false;
-                }
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Isloading)));
-            }
-            get => _isloading;
-        }
+        public bool Isloading { get; set; }
 
         public ObservableCollection<YoutubeVideoModel> MainVideoList { get; set; }
 
@@ -60,7 +37,13 @@ namespace Youtube_DL.ViewModel
         public MainViewModel()
         {
             MainVideoList = new ObservableCollection<YoutubeVideoModel>();
-            AddButton = new Command((s) => AddToDownload(s as string));
+            //AddButton = new Command((s) => AddToDownload(s as string));
+            AddButton = new Command(Test);
+        }
+
+        private async void Test()
+        {
+            var valeu = await DialogHost.Show(new AddVideoPopup());
         }
 
         private async void AddToDownload(string urls)

@@ -3,7 +3,6 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Padding="15"
@@ -12,36 +11,33 @@
     Background="White"
     mc:Ignorable="d">
 
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolConvert" />
+    </UserControl.Resources>
+
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="20*" />
-        </Grid.ColumnDefinitions>
-        <Grid Grid.Column="0">
-            <Border
-                Width="1"
-                Margin="0,10"
-                HorizontalAlignment="Right"
-                BorderBrush="Gray"
-                BorderThickness="1"
-                Opacity="0.4" />
-            <StackPanel
-                HorizontalAlignment="Left"
+        <Grid>
+            <TextBlock
+                HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                Orientation="Vertical">
-                <StackPanel.RenderTransform>
-                    <TranslateTransform X="-7" />
-                </StackPanel.RenderTransform>
-                <Button Style="{StaticResource MaterialDesignOutlinedButton}" ToolTip="MaterialDesignOutlinedButton" Padding="0"
-                        Width="40"
-                        Height="40">
-                    <materialDesign:PackIcon Kind="DownloadOutline" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                </Button>
-            </StackPanel>
+                Foreground="Gray"
+                Text="Нет видео для скачивание" 
+                FontSize="30"
+                Margin="0,0,0,30"
+                Opacity="0.7"
+                Visibility="{Binding Isloading, Converter={StaticResource BoolConvert}}"
+                />
         </Grid>
-        <Grid Grid.Column="1">
-            
-        </Grid>
+
+        <Button
+            Command="{Binding AddButton}"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Bottom"
+            Content="{materialDesign:PackIcon Kind=Plus}"
+            Foreground="White"
+            Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
+            ToolTip="MaterialDesignFloatingActionMiniButton" 
+            Margin="5"/>
     </Grid>
 
 
