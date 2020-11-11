@@ -5,16 +5,36 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>Youtube_DL</RootNamespace>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>YoutubeIco.ico</ApplicationIcon>
+    <AssemblyName>Youtube-Downloader</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentWPF" Version="0.8.0" />
-    <PackageReference Include="MaterialDesignThemes" Version="3.2.0" />
+    <None Remove="YoutubeIco.ico" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Model\" />
+    <PackageReference Include="HandyControl" Version="2.5.0.2" />
+    <PackageReference Include="MaterialDesignThemes" Version="3.2.0" />
+    <PackageReference Include="NYoutubeDL" Version="0.11.0" />
+    <PackageReference Include="PropertyChanged.Fody" Version="4.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Properties\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Resources\youtube-dl.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="YoutubeIco.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Resources\Logo.xaml">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Page>
   </ItemGroup>
 
 </Project>
