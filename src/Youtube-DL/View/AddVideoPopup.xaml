@@ -2,11 +2,14 @@
     x:Class="Youtube_DL.View.AddVideoPopup"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converte="clr-namespace:Youtube_DL.Helps"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:Youtube_DL.View"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
+
+
+
     <Grid>
         <StackPanel Margin="20,15">
             <TextBlock
@@ -17,6 +20,8 @@
                 Foreground="Red"
                 Text="Добавить видео" />
             <TextBox
+                Name="UrlTextBox"
+                Width="305"
                 VerticalAlignment="Center"
                 materialDesign:HintAssist.Hint="URL"
                 AcceptsReturn="True"
@@ -27,15 +32,26 @@
                 HorizontalAlignment="Center"
                 Orientation="Horizontal">
                 <Button
-                    Content="Добавить"
-                    Style="{StaticResource MaterialDesignFlatButton}"
-                    Margin="20,0"/>
+                    Margin="20,0"
+                    Command="{Binding AddVideoCommand}"
+                    CommandParameter="{Binding Path=Text, ElementName=UrlTextBox}"
+                    Style="{StaticResource MaterialDesignFlatButton}">
+                    <Grid>
+                        <TextBlock Text="Добавить" Visibility="{Binding IsLoading, Converter={StaticResource InverseBoolToVisConverter}}" />
+                        <ProgressBar
+                            IsIndeterminate="True"
+                            Style="{StaticResource MaterialDesignCircularProgressBar}"
+                            Visibility="{Binding IsLoading, Converter={StaticResource TrueToVisible}}"
+                            Value="0" />
+                    </Grid>
+                </Button>
                 <Button
-                    Content="Отмена"
-                    Style="{StaticResource MaterialDesignFlatButton}"
                     Margin="22,0"
-                    Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"/>
-                
+                    Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"
+                    Content="Отмена"
+                    IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBool}}"
+                    Style="{StaticResource MaterialDesignFlatButton}" />
+
             </StackPanel>
         </StackPanel>
     </Grid>

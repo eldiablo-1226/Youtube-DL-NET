@@ -1,0 +1,15 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:Youtube_DL.Helps">
+
+    <local:InserveBoolConverter x:Key="InverseBool" />
+
+    <local:BoolToValueConverter x:Key="TrueToVisible">
+        <local:BoolToValueConverter.TrueValue>
+            <Visibility>Visible</Visibility>
+        </local:BoolToValueConverter.TrueValue>
+        <local:BoolToValueConverter.NullOrFalseValue>
+            <Visibility>Collapsed</Visibility>
+        </local:BoolToValueConverter.NullOrFalseValue>
+    </local:BoolToValueConverter>
+</ResourceDictionary>

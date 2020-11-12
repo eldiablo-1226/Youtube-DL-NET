@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:helps="clr-namespace:Youtube_DL.Helps"
     Padding="15"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -18,26 +19,25 @@
     <Grid>
         <Grid>
             <TextBlock
+                Margin="0,0,0,30"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                Foreground="Gray"
-                Text="Нет видео для скачивание" 
                 FontSize="30"
-                Margin="0,0,0,30"
+                Foreground="Gray"
                 Opacity="0.7"
-                Visibility="{Binding Isloading, Converter={StaticResource BoolConvert}}"
-                />
+                Text="Нет видео для скачивание"
+                Visibility="{Binding Isloading, Converter={StaticResource BoolConvert}}" />
         </Grid>
 
         <Button
-            Command="{Binding AddButton}"
+            Margin="5"
             HorizontalAlignment="Right"
             VerticalAlignment="Bottom"
+            Command="{Binding AddButton}"
             Content="{materialDesign:PackIcon Kind=Plus}"
             Foreground="White"
             Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
-            ToolTip="MaterialDesignFloatingActionMiniButton" 
-            Margin="5"/>
+            ToolTip="MaterialDesignFloatingActionMiniButton" />
     </Grid>
 
 
