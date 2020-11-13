@@ -3,9 +3,9 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:helps="clr-namespace:Youtube_DL.Helps"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:helps="clr-namespace:Youtube_DL.Helps"
     Padding="15"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -26,7 +26,96 @@
                 Foreground="Gray"
                 Opacity="0.7"
                 Text="Нет видео для скачивание"
-                Visibility="{Binding Isloading, Converter={StaticResource BoolConvert}}" />
+                Visibility="{Binding ShowHsVideoText, Converter={StaticResource InverseBoolToVisConverter}}" />
+            <ScrollViewer Margin="-15" VerticalScrollBarVisibility="Hidden">
+                <ItemsControl ItemsSource="{Binding MainVideoList}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <materialDesign:Card
+                                Height="260"
+                                Margin="20,20"
+                                materialDesign:ShadowAssist.ShadowDepth="Depth5"
+                                UniformCornerRadius="15">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <Grid Grid.Row="0" Height="122">
+                                        <ProgressBar
+                                            IsIndeterminate="True"
+                                            Style="{StaticResource MaterialDesignCircularProgressBar}"
+                                            Value="0" />
+                                        <Image
+                                            Name="Receiver"
+                                            Source="{Binding Image}"
+                                            Stretch="Fill" />
+                                    </Grid>
+                                    <Grid Grid.Row="1" Margin="20,0">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*" />
+                                            <RowDefinition Height="2*" />
+                                        </Grid.RowDefinitions>
+
+                                        <TextBlock
+                                            Grid.Row="0"
+                                            Margin="0,6,0,0"
+                                            FontSize="13"
+                                            FontWeight="Bold"
+                                            Text="{Binding Title}"
+                                            TextAlignment="Left"
+                                            TextTrimming="CharacterEllipsis"
+                                            TextWrapping="Wrap" />
+
+                                        <Grid Grid.Row="1">
+                                            <!--  DownloadInfo  -->
+                                            <StackPanel Visibility="Hidden">
+                                                <!--  Visibility="{Binding Isloading, Converter={StaticResource InverseBoolToVisConverter}}"  -->
+                                                <ComboBox
+                                                    Margin="0,2,2,13"
+                                                    FontSize="12"
+                                                    ItemsSource="{Binding Formats}"
+                                                    SelectedItem="{Binding SelectedIteam}" />
+                                                <Button
+                                                    Content="Скачать"
+                                                    Foreground="White"
+                                                    Style="{StaticResource MaterialDesignRaisedButton}" />
+                                            </StackPanel>
+                                            <!--  DownloadView  -->
+                                            <StackPanel>
+                                                <TextBlock Text=""/>
+                                                <ProgressBar Value="70" />
+                                                <Button
+                                                    Margin="0,15,0,0"
+                                                    Content="Отменить"
+                                                    Foreground="White"
+                                                    Style="{StaticResource MaterialDesignRaisedButton}" />
+                                            </StackPanel>
+                                        </Grid>
+
+                                    </Grid>
+                                </Grid>
+                            </materialDesign:Card>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="3" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </ScrollViewer>
+            <Border
+                Height="20"
+                Margin="-15"
+                VerticalAlignment="Top">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                        <GradientStop Color="White" />
+                        <GradientStop Offset="1" Color="Transparent" />
+                    </LinearGradientBrush>
+                </Border.Background>
+            </Border>
         </Grid>
 
         <Button
@@ -37,7 +126,7 @@
             Content="{materialDesign:PackIcon Kind=Plus}"
             Foreground="White"
             Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
-            ToolTip="MaterialDesignFloatingActionMiniButton" />
+            ToolTip="Добавить" />
     </Grid>
 
 

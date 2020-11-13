@@ -13,7 +13,7 @@ using Youtube_DL.Model;
 
 namespace Youtube_DL.ViewModel
 {
-    class AddVideoPopupViewModel : INotifyPropertyChanged
+    class AddVideoPopupViewModel : BaseViewModel
     {
         public event PropertyChangedEventHandler PropertyChanged;
 

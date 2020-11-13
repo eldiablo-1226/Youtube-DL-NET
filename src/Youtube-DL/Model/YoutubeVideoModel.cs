@@ -12,39 +12,20 @@ using NYoutubeDL.Helpers;
 using NYoutubeDL.Models;
 using NYoutubeDL.Options;
 using Youtube_DL.Core;
-using ByteConverter = Youtube_DL.Core.ByteConverter;
+using Youtube_DL.Helps;
+using ByteConverter = Youtube_DL.Helps.ByteConverter;
 
 namespace Youtube_DL.Model
 {
-    internal class YoutubeVideoModel : INotifyPropertyChanged
+    internal class YoutubeVideoModel : BaseViewModel
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
         private YoutubeDL Downloader;
 
-        public Visibility IsNotVisible { get; set; } = Visibility.Visible;
-        public Visibility IsVisible { get; set; } = Visibility.Hidden;
-        private bool _isloading = false;
-        public bool Isloading
-        {
-            set
-            {
-                if (value)
-                {
-                    IsNotVisible = Visibility.Hidden;
-                    IsVisible = Visibility.Visible;
-                    _isloading = true;
-                }
-                else
-                {
-                    IsNotVisible = Visibility.Visible;
-                    IsVisible = Visibility.Hidden;
-                    _isloading = false;
-                }
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Isloading)));
-            }
-            get => _isloading;
-        }
+        public bool Isloading { get; set; }
+        public bool Finished { get; set; }
+        public bool ErrorStatus { get; set; }
 
         public string Image { get; set; }
         public string Title { get; set; }
@@ -58,7 +39,6 @@ namespace Youtube_DL.Model
         public Command Download { get; set; }
         public Command CancelDownload { get; set; }
 
-        public PackIcon IconClose { get; set; } = new PackIcon(){ Kind = PackIconKind.CloseOutline };
 
         public YoutubeVideoModel([NotNull]DownloadInfo Info, string url)
         {
@@ -72,12 +52,9 @@ namespace Youtube_DL.Model
             Title = AllInfo.Title;
             URL = url;
             Formats = AllInfo.Formats
-                .OrderByDescending(x=> x.FormatId)
-                .Select(x =>
-                    {
-                        string size = x.Filesize == null ? "~ byte" : ByteConverter.SizeSuffix((long)x.Filesize);
-                        return $"{x.FormatNote} - {size} - {x.Ext}";
-                    })
+                .Where(x=>x.FormatNote != "tiny" || x.Height != null)
+                .OrderByDescending(x=> x.Height)
+                .Select(x => $"{x.FormatNote}-{x.Filesize.SizeSuffix()}-{x.Ext}")
                 .ToList();
             SelectedIteam = Formats.FirstOrDefault();
 
@@ -104,7 +81,6 @@ namespace Youtube_DL.Model
                 default:
                     break;
             }
-
         }
 
         public void StartDownload()

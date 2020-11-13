@@ -1,20 +1,18 @@
 ﻿using MaterialDesignThemes.Wpf;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Windows;
 using Youtube_DL.Core;
 using Youtube_DL.Model;
 using Youtube_DL.View;
 
 namespace Youtube_DL.ViewModel
 {
-    internal class MainViewModel : INotifyPropertyChanged
+    internal class MainViewModel : BaseViewModel
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-
+        private AddVideoPopup viewPopup;
         #region Property
 
         public bool Isloading { get; set; }
+        public bool ShowHsVideoText => MainVideoList.Count > 0;
 
         public ObservableCollection<YoutubeVideoModel> MainVideoList { get; set; }
 
@@ -29,16 +27,20 @@ namespace Youtube_DL.ViewModel
         public MainViewModel()
         {
             MainVideoList = new ObservableCollection<YoutubeVideoModel>();
+            viewPopup = new AddVideoPopup();
+            MainVideoList.CollectionChanged += (o,s) => OnPropertyChanged(nameof(ShowHsVideoText));
             AddButton = new Command(AddViewShow);
+
         }
 
         private async void AddViewShow()
         {
-            var VideoInfo = await DialogHost.Show(new AddVideoPopup());
+            var videoInfo = await DialogHost.Show(viewPopup);
 
-            if(VideoInfo is null) return;
+            if(videoInfo is null || videoInfo is not YoutubeVideoModel) return;
 
-            MessageBox.Show(VideoInfo.GetType().FullName);
+            MainVideoList.Add(videoInfo as YoutubeVideoModel);
+            await YoutubeDownloader.ydlClient.DownloadAsync((videoInfo as YoutubeVideoModel).URL);
         }
     }
 }
