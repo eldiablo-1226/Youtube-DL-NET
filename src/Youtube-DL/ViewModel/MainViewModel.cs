@@ -10,6 +10,7 @@ namespace Youtube_DL.ViewModel
 {
     internal class MainViewModel : BaseViewModel
     {
+        
         private AddVideoPopup viewPopup;
         #region Property
 
@@ -22,8 +23,8 @@ namespace Youtube_DL.ViewModel
 
         #region Command
 
-        public Command _AddButton { get; set; }
-        public Command _AddToClipboard { get; set; }
+        public Command _AddButton { get; }
+        public Command _AddToClipboard { get; }
 
 
         #endregion Command

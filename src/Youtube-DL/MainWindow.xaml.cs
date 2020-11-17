@@ -1,5 +1,7 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Input;
+using Youtube_DL.Core;
 
 namespace Youtube_DL
 {
@@ -8,6 +10,13 @@ namespace Youtube_DL
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+            
+            SettingLocator.settings.Save();
         }
 
         private void MouseMoveWindow(object sender, MouseButtonEventArgs e)
