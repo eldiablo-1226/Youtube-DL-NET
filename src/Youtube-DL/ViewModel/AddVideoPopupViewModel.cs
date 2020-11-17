@@ -8,10 +8,12 @@ using System.Windows;
 using MaterialDesignThemes.Wpf;
 using Youtube_DL.Core;
 using Youtube_DL.Model;
+using YoutubeExplode.Playlists;
+using YoutubeExplode.Videos;
 
 namespace Youtube_DL.ViewModel
 {
-    class AddVideoPopupViewModel : BaseViewModel
+    internal class AddVideoPopupViewModel : BaseViewModel
     {
         public Command AddVideoCommand { get; set; }
         public bool IsLoading { get; set; }
@@ -23,44 +25,56 @@ namespace Youtube_DL.ViewModel
 
         private async void AddVideoToList(object s)
         {
-            if (IsLoading || s == null) return;
+            if (IsLoading || string.IsNullOrWhiteSpace(s as string)) return;
             string url = s as string;
-            if (string.IsNullOrEmpty(url))
-                MessageBox.Show("Пожалуйста введите ссылку !!!");
-            else
-            {
-                if (CheckURL(url))
-                {
-                    try
-                    {
-                        //IsLoading = true;
-                        //var YI = await ydlClient.GetDownloadInfoAsync(url);
-                        //IsLoading = false;
-                        //DialogHost.Close("MainDialog", new YoutubeVideoModel(YI, url));
-
-                    }
-                    catch (Exception e)
-                    {
-                        if (IsLoading)
-                            IsLoading = false;
-                        MessageBox.Show(e.Message);
-                    }
-                }
-                else
-                    MessageBox.Show("Ссылку не валидна !!!");
-            }
+            
+            
         }
 
-        public static bool CheckURL(string videoUri)
+        public static bool tryParce(string videoUri)
         {
-            videoUri = new StringBuilder(videoUri).Replace("youtu.be/", "youtube.com/watch?v=")
-                .Replace("youtube.com/embed/", "youtube.com/watch?v=").Replace("/v/", "/watch?v=")
-                .Replace("/watch#", "/watch?").ToString();
+            if()
+        }
+        
+        
+    }
 
-            if (videoUri.Contains("youtube.com/watch?v="))
-                return true;
-            return false;
+    public static class VideoChecker
+    {
+        private static VideoType TryParseVideoId(string query)
+        {
+            VideoId? Id = null;
+            try
+            {
+                Id = new VideoId(query);
+            }
+            catch (ArgumentException)
+            {
+            }
+
+            return Id is not null;
+        }
+
+        private static bool TryParsePlaylistId(string query)
+        {
+            PlaylistId? Id = null;
+            try
+            {
+                Id = new PlaylistId(query);
+            }
+            catch (ArgumentException)
+            {
+            }
+            return Id is not null;
         }
     }
+
+    public enum VideoType
+    {
+        Video,
+        PlayList,
+        none
+    }
+        
 }
 

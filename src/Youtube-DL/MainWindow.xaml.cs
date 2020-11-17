@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
 using Youtube_DL.Core;
@@ -10,11 +11,12 @@ namespace Youtube_DL
         public MainWindow()
         {
             InitializeComponent();
+            SettingLocator.settings.Load();
         }
 
-        protected override void OnClosed(EventArgs e)
+        protected override void OnClosing(CancelEventArgs e)
         {
-            base.OnClosed(e);
+            base.OnClosing(e);
             
             SettingLocator.settings.Save();
         }

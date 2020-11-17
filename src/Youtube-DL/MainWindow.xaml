@@ -1,53 +1,58 @@
 ﻿<Window
+    AllowsTransparency="True"
+    Background="Transparent"
+    Height="450"
+    ResizeMode="NoResize"
+    Title="MainWindow"
+    Width="800"
+    WindowStartupLocation="CenterScreen"
+    WindowStyle="None"
+    mc:Ignorable="d"
     x:Class="Youtube_DL.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:MyViews="clr-namespace:Youtube_DL.View"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Title="MainWindow"
-    Width="800"
-    Height="450"
-    AllowsTransparency="True"
-    Background="Transparent"
-    ResizeMode="NoResize"
-    WindowStartupLocation="CenterScreen"
-    WindowStyle="None"
-    mc:Ignorable="d">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <materialDesign:Card
         Margin="15,10,15,25"
-        materialDesign:ShadowAssist.ShadowDepth="Depth4"
-        UniformCornerRadius="15">
-        <materialDesign:DialogHost Identifier="MainDialog">
+        UniformCornerRadius="15"
+        materialDesign:ShadowAssist.ShadowDepth="Depth4">
+
+        <materialDesign:DialogHost
+            CloseOnClickAway="True"
+            Identifier="MainDialog"
+            SnackbarMessageQueue="{Binding Notifications}">
+
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="35" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <Grid
-                    Grid.Row="0"
                     Background="White"
+                    Grid.Row="0"
                     MouseDown="MouseHideClick"
                     MouseLeftButtonDown="MouseMoveWindow">
                     <StackPanel
-                        Margin="15,0,0,0"
                         HorizontalAlignment="Left"
-                        VerticalAlignment="Center"
-                        Orientation="Horizontal">
+                        Margin="15,0,0,0"
+                        Orientation="Horizontal"
+                        VerticalAlignment="Center">
                         <Image Margin="10" Source="{StaticResource YoutubeLogo}" />
                         <TextBlock
-                            VerticalAlignment="Center"
                             FontSize="15"
                             FontWeight="Bold"
-                            Text="Youtube" />
+                            Text="Youtube"
+                            VerticalAlignment="Center" />
                     </StackPanel>
                     <StackPanel
-                        Margin="0,0,15,0"
                         HorizontalAlignment="Right"
-                        VerticalAlignment="Center"
-                        Orientation="Horizontal">
+                        Margin="0,0,15,0"
+                        Orientation="Horizontal"
+                        VerticalAlignment="Center">
                         <Image
                             Margin="0,12"
                             MouseDown="MouseCloseClick"

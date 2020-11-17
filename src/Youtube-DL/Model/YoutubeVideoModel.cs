@@ -35,7 +35,7 @@ namespace Youtube_DL.Model
         public Command CancelDownload { get; set; }
 
 
-        public YoutubeVideoModel()
+        public YoutubeVideoModel(string)
         {
             
         }

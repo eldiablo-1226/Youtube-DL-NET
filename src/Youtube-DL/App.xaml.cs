@@ -1,11 +1,8 @@
-﻿using System.Windows;
+﻿using System.Configuration;
+using System.Windows;
+using Youtube_DL.Core;
 
 namespace Youtube_DL
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
-    public partial class App : Application
-    {
-    }
+    public partial class App : Application {}
 }

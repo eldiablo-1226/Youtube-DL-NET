@@ -17,6 +17,7 @@ namespace Youtube_DL.ViewModel
         public bool Isloading { get; set; }
         public bool ShowHsVideoText => MainVideoList.Count > 0;
 
+        public ISnackbarMessageQueue Notifications { get; } = new SnackbarMessageQueue(TimeSpan.FromSeconds(5));
         public ObservableCollection<YoutubeVideoModel> MainVideoList { get; set; }
 
         #endregion Property
