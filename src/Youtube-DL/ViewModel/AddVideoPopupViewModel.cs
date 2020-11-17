@@ -6,8 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using MaterialDesignThemes.Wpf;
-using NYoutubeDL;
-using NYoutubeDL.Models;
 using Youtube_DL.Core;
 using Youtube_DL.Model;
 
@@ -15,9 +13,6 @@ namespace Youtube_DL.ViewModel
 {
     class AddVideoPopupViewModel : BaseViewModel
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        YoutubeDL ydlClient = new YoutubeDL(@"Resources\youtube-dl.exe");
         public Command AddVideoCommand { get; set; }
         public bool IsLoading { get; set; }
 
@@ -38,10 +33,10 @@ namespace Youtube_DL.ViewModel
                 {
                     try
                     {
-                        IsLoading = true;
-                        var YI = await ydlClient.GetDownloadInfoAsync(url);
-                        IsLoading = false;
-                        DialogHost.Close("MainDialog", new YoutubeVideoModel(YI, url));
+                        //IsLoading = true;
+                        //var YI = await ydlClient.GetDownloadInfoAsync(url);
+                        //IsLoading = false;
+                        //DialogHost.Close("MainDialog", new YoutubeVideoModel(YI, url));
 
                     }
                     catch (Exception e)
@@ -56,7 +51,7 @@ namespace Youtube_DL.ViewModel
             }
         }
 
-        private bool CheckURL(string videoUri)
+        public static bool CheckURL(string videoUri)
         {
             videoUri = new StringBuilder(videoUri).Replace("youtu.be/", "youtube.com/watch?v=")
                 .Replace("youtube.com/embed/", "youtube.com/watch?v=").Replace("/v/", "/watch?v=")

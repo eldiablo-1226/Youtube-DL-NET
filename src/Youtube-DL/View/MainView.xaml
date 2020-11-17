@@ -69,24 +69,34 @@
 
                                         <Grid Grid.Row="1">
                                             <!--  DownloadInfo  -->
-                                            <StackPanel Visibility="Hidden">
-                                                <!--  Visibility="{Binding Isloading, Converter={StaticResource InverseBoolToVisConverter}}"  -->
+                                            <StackPanel Visibility="{Binding Isloading, Converter={StaticResource InverseBoolToVisConverter}}">
                                                 <ComboBox
                                                     Margin="0,2,2,13"
                                                     FontSize="12"
                                                     ItemsSource="{Binding Formats}"
                                                     SelectedItem="{Binding SelectedIteam}" />
                                                 <Button
+                                                    Command="{Binding Download}"
                                                     Content="Скачать"
                                                     Foreground="White"
                                                     Style="{StaticResource MaterialDesignRaisedButton}" />
                                             </StackPanel>
                                             <!--  DownloadView  -->
-                                            <StackPanel>
-                                                <TextBlock Text=""/>
-                                                <ProgressBar Value="70" />
+                                            <StackPanel Visibility="{Binding Isloading, Converter={StaticResource TrueToVisible}}">
+                                                <Grid Margin="0,5,0,0">
+                                                    <TextBlock
+                                                        HorizontalAlignment="Left"
+                                                        VerticalAlignment="Center"
+                                                        Text="{Binding Speed}" />
+                                                    <TextBlock
+                                                        HorizontalAlignment="Right"
+                                                        VerticalAlignment="Center"
+                                                        Text="{Binding DownloadPercentage}" />
+                                                </Grid>
+                                                <ProgressBar Value="{Binding DownloadPercentageDouble}" />
                                                 <Button
-                                                    Margin="0,15,0,0"
+                                                    Margin="0,18,0,0"
+                                                    Command="{Binding CancelDownload}"
                                                     Content="Отменить"
                                                     Foreground="White"
                                                     Style="{StaticResource MaterialDesignRaisedButton}" />
@@ -122,11 +132,17 @@
             Margin="5"
             HorizontalAlignment="Right"
             VerticalAlignment="Bottom"
-            Command="{Binding AddButton}"
+            Command="{Binding _AddButton}"
             Content="{materialDesign:PackIcon Kind=Plus}"
             Foreground="White"
             Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
-            ToolTip="Добавить" />
+            ToolTip="Добавить">
+            <Button.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Command="{Binding _AddToClipboard}" Header="Добавить из буфера" />
+                </ContextMenu>
+            </Button.ContextMenu>
+        </Button>
     </Grid>
 
 
