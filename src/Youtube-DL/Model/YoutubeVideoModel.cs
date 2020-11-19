@@ -68,6 +68,7 @@ namespace Youtube_DL.Model
             {
                 try
                 {
+                    _cancellationToken = new CancellationTokenSource();
                     Isloading = true;
                     for (int i = 0; i < Videos.Length; i++)
                     {
@@ -85,6 +86,8 @@ namespace Youtube_DL.Model
                 finally
                 {
                     Isloading = false;
+                    _cancellationToken?.Dispose();
+                    _cancellationToken = null;
                 }
             }
             else

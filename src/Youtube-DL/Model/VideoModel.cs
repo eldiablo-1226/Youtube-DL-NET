@@ -8,10 +8,8 @@ namespace Youtube_DL.Model
     public partial class VideoDownloadOption
     {
         public string Format { get; }
-
         public string Label { get; }
-
-        public string FrameRate { get; }
+        public string Size { get; set; }
 
         public IReadOnlyList<IStreamInfo> StreamInfos { get; }
 
@@ -30,8 +28,10 @@ namespace Youtube_DL.Model
         public VideoDownloadOption(
             string format,
             string label,
+            string size,
             IReadOnlyList<IStreamInfo> streamInfos)
         {
+            Size = size;
             Format = format;
             Label = label;
             StreamInfos = streamInfos;
@@ -40,10 +40,11 @@ namespace Youtube_DL.Model
         public VideoDownloadOption(
             string format,
             string label,
+            string size,
             params IStreamInfo[] streamInfos)
-            : this(format, label, (IReadOnlyList<IStreamInfo>)streamInfos) { }
+            : this(format, label, size, (IReadOnlyList<IStreamInfo>)streamInfos) { }
 
-        public override string ToString() => $"{Label} / {Format}";
+        public override string ToString() => $"{Label} / {Format} / {Size}";
     }
 
     public partial class VideoDownloadOption : IEquatable<VideoDownloadOption>

@@ -1,5 +1,4 @@
-﻿#nullable enable
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -12,6 +11,7 @@ using YoutubeExplode;
 using YoutubeExplode.Playlists;
 using YoutubeExplode.Videos;
 using YoutubeExplode.Videos.Streams;
+using Microsoft.Win32;
 
 namespace Youtube_DL.Core
 {
@@ -27,8 +27,9 @@ namespace Youtube_DL.Core
             if (videoOption == null)
                 throw new InvalidOperationException($"Video '{downloaVideo.Id}' contains no streams.");
 
-            string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyVideos),
-                Path.ChangeExtension(downloaVideo.Title, videoOption.Format));
+            string path = PromptSaveFilePath(downloaVideo.Title, videoOption.Format);
+            if(path == null) throw new AggregateException("SelectPath");
+
             var conversion = new ConversionRequestBuilder(path)
                 .SetFormat(videoOption.Format)
                 .SetPreset(ConversionPreset.Medium)
@@ -59,13 +60,12 @@ namespace Youtube_DL.Core
             {
                 var format = streamInfo.Container.Name;
                 var label = streamInfo.VideoQualityLabel;
-                var frameRate = streamInfo.Framerate.ToString();
                 var videoSize = streamInfo.Size.TotalBytes.SizeSuffix();
 
                 // Muxed streams are standalone
                 if (streamInfo is MuxedStreamInfo)
                 {
-                    options.Add(new VideoDownloadOption(format, label, streamInfo));
+                    options.Add(new VideoDownloadOption(format, label,  videoSize, streamInfo));
                     continue;
                 }
 
@@ -85,7 +85,7 @@ namespace Youtube_DL.Core
 
                 if (audioStreamInfo != null)
                 {
-                    options.Add(new VideoDownloadOption(format, label, streamInfo, audioStreamInfo));
+                    options.Add(new VideoDownloadOption(format, label,  videoSize, streamInfo, audioStreamInfo));
                 }
             }
 
@@ -98,8 +98,8 @@ namespace Youtube_DL.Core
 
             if (bestAudioOnlyStreamInfo != null)
             {
-                options.Add(new VideoDownloadOption("mp3", "Audio", bestAudioOnlyStreamInfo));
-                options.Add(new VideoDownloadOption("ogg", "Audio", bestAudioOnlyStreamInfo));
+                options.Add(new VideoDownloadOption("mp3", "Audio", bestAudioOnlyStreamInfo.Size.TotalBytes.SizeSuffix(), bestAudioOnlyStreamInfo));
+                options.Add(new VideoDownloadOption("ogg", "Audio",  bestAudioOnlyStreamInfo.Size.TotalBytes.SizeSuffix(), bestAudioOnlyStreamInfo));
             }
 
             return options.ToArray();
@@ -175,6 +175,24 @@ namespace Youtube_DL.Core
 
     public partial class YoutubeVideoService
     {
+        private static string? PromptSaveFilePath(string defaultFileName, string filter)
+        {
+            var dialog = new SaveFileDialog
+            {
+                FileName = defaultFileName,
+                Filter = $"{filter} files|*.{filter}|All Files|*.*",
+                AddExtension = true,
+                DefaultExt = Path.GetExtension(defaultFileName) ?? ""
+            };
+            return dialog.ShowDialog() == true ? SanitizeFileName(dialog.FileName) : null;
+        }
+        private static string SanitizeFileName(string fileName)
+        {
+            foreach (var invalidChar in Path.GetInvalidFileNameChars())
+                fileName = fileName.Replace(invalidChar, '_');
+
+            return fileName;
+        }
         public static VideoType TryParce(string videoUri)
         {
             var videiId = TryParseVideoId(videoUri);
