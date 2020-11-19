@@ -73,8 +73,8 @@
                                                 <ComboBox
                                                     Margin="0,2,2,13"
                                                     FontSize="12"
-                                                    ItemsSource="{Binding Formats}"
-                                                    SelectedItem="{Binding SelectedIteam}" />
+                                                    ItemsSource="{Binding VideoOptions}"
+                                                    SelectedItem="{Binding CurrerntVideoOption}" />
                                                 <Button
                                                     Command="{Binding Download}"
                                                     Content="Скачать"
@@ -85,15 +85,11 @@
                                             <StackPanel Visibility="{Binding Isloading, Converter={StaticResource TrueToVisible}}">
                                                 <Grid Margin="0,5,0,0">
                                                     <TextBlock
-                                                        HorizontalAlignment="Left"
-                                                        VerticalAlignment="Center"
-                                                        Text="{Binding Speed}" />
-                                                    <TextBlock
                                                         HorizontalAlignment="Right"
                                                         VerticalAlignment="Center"
                                                         Text="{Binding DownloadPercentage}" />
                                                 </Grid>
-                                                <ProgressBar Value="{Binding DownloadPercentageDouble}" />
+                                                <ProgressBar Value="{Binding DownloadPercentage}" />
                                                 <Button
                                                     Margin="0,18,0,0"
                                                     Command="{Binding CancelDownload}"

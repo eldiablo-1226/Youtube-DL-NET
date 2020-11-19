@@ -11,7 +11,6 @@ namespace Youtube_DL.ViewModel
     internal class MainViewModel : BaseViewModel
     {
         
-        private AddVideoPopup viewPopup;
         #region Property
 
         public bool Isloading { get; set; }
@@ -32,8 +31,7 @@ namespace Youtube_DL.ViewModel
 
         public MainViewModel()
         {
-            MainVideoList = new ObservableCollection<YoutubeVideoModel>();
-            viewPopup = new AddVideoPopup();
+            MainVideoList = SettingLocator.settings.Collection;
             _AddButton = new Command(AddViewShow);
             _AddToClipboard = new Command(AddToClipboard);
             MainVideoList.CollectionChanged += (o,s) => OnPropertyChanged(nameof(ShowHsVideoText));
@@ -45,12 +43,12 @@ namespace Youtube_DL.ViewModel
             {
                 string ClipBoardText = Clipboard.GetText();
 
-                if (AddVideoPopupViewModel.CheckURL(ClipBoardText))
+                if (true)
                 {
                     try
                     {
-                        //var Info = await DialogHost.Show(new LoadingView(), "MainDialog");
-                        //MainVideoList.Add((YoutubeVideoModel)(Info ?? Info ));
+                        var info = await DialogHost.Show(new LoadingView(), "MainDialog");
+                        MainVideoList.Add((YoutubeVideoModel)(info));
                     }
                     catch (Exception e)
                     {
@@ -68,8 +66,7 @@ namespace Youtube_DL.ViewModel
         {
             try
             {
-                var videoInfo = await DialogHost.Show(viewPopup);
-
+                var videoInfo = await DialogHost.Show(new AddVideoPopup());
                 if (videoInfo is null || videoInfo is not YoutubeVideoModel) return;
 
                 MainVideoList.Add(videoInfo as YoutubeVideoModel);

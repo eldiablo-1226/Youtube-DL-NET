@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="ffmpeg.exe" />
     <None Remove="YoutubeIco.ico" />
   </ItemGroup>
 
@@ -27,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Resources\youtube-dl.exe">
+    <Content Include="ffmpeg.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="YoutubeIco.ico" />

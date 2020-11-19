@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using MaterialDesignThemes.Wpf;
 using Youtube_DL.Core;
 using Youtube_DL.Model;
+using YoutubeExplode;
 using YoutubeExplode.Playlists;
 using YoutubeExplode.Videos;
 
@@ -15,66 +14,41 @@ namespace Youtube_DL.ViewModel
 {
     internal class AddVideoPopupViewModel : BaseViewModel
     {
-        public Command AddVideoCommand { get; set; }
-        public bool IsLoading { get; set; }
+        private YoutubeVideoService _youtubeservise;
+        public Command AddVideoCommand { get; }
+        public bool IsLoading { get; private set; }
 
         public AddVideoPopupViewModel()
         {
+            _youtubeservise = new YoutubeVideoService();
             AddVideoCommand = new Command(AddVideoToList);
         }
 
         private async void AddVideoToList(object s)
         {
             if (IsLoading || string.IsNullOrWhiteSpace(s as string)) return;
-            string url = s as string;
-            
-            
-        }
+            string url = (string)s;
 
-        public static bool tryParce(string videoUri)
-        {
-            if()
-        }
-        
-        
-    }
-
-    public static class VideoChecker
-    {
-        private static VideoType TryParseVideoId(string query)
-        {
-            VideoId? Id = null;
             try
             {
-                Id = new VideoId(query);
+                IsLoading = true;
+                var videos = await _youtubeservise.GetVideosAsync(url);
+                var videoOptions = await _youtubeservise.GetVideoDownloadOptionsAsync(url);
+                IsLoading = false;
+                DialogHost.Close("MainDialog", new YoutubeVideoModel(videos.ToArray(), videoOptions));
             }
             catch (ArgumentException)
             {
+                MessageBox.Show("Ссылка не правильно");
             }
-
-            return Id is not null;
+            catch (Exception)
+            {
+                MessageBox.Show("Ошибка сети");
+            }
+            IsLoading = false;
         }
 
-        private static bool TryParsePlaylistId(string query)
-        {
-            PlaylistId? Id = null;
-            try
-            {
-                Id = new PlaylistId(query);
-            }
-            catch (ArgumentException)
-            {
-            }
-            return Id is not null;
-        }
-    }
 
-    public enum VideoType
-    {
-        Video,
-        PlayList,
-        none
     }
-        
 }
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using Tyrrrz.Settings;
 using Youtube_DL.Model;
 
@@ -7,7 +8,7 @@ namespace Youtube_DL.Core
     public class Settings : SettingsManager
     {
 
-        public string SavePath { get; set; }
+        public string SavePath { get; set; } = Environment.GetFolderPath(Environment.SpecialFolder.MyVideos);
         
         public ObservableCollection<YoutubeVideoModel> Collection { get; set; } = new ObservableCollection<YoutubeVideoModel>();
         
