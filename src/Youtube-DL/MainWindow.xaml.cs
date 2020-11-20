@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
 using Youtube_DL.Core;
+using Youtube_DL.Model;
+using YoutubeExplode.Videos;
 
 namespace Youtube_DL
 {
@@ -11,14 +15,6 @@ namespace Youtube_DL
         public MainWindow()
         {
             InitializeComponent();
-            SettingLocator.settings.Load();
-        }
-
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            base.OnClosing(e);
-            
-            SettingLocator.settings.Save();
         }
 
         private void MouseMoveWindow(object sender, MouseButtonEventArgs e)

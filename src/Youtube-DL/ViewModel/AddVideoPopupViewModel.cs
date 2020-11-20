@@ -41,9 +41,9 @@ namespace Youtube_DL.ViewModel
             {
                 MessageBox.Show("Ссылка не правильно");
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                MessageBox.Show("Ошибка сети");
+                MessageBox.Show(e.Message);
             }
             IsLoading = false;
         }

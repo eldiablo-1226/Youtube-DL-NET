@@ -10,13 +10,13 @@ namespace Youtube_DL.ViewModel
 {
     internal class MainViewModel : BaseViewModel
     {
-        
         #region Property
 
         public bool Isloading { get; set; }
         public bool ShowHsVideoText => MainVideoList.Count > 0;
 
         public ISnackbarMessageQueue Notifications { get; } = new SnackbarMessageQueue(TimeSpan.FromSeconds(5));
+
         public ObservableCollection<YoutubeVideoModel> MainVideoList { get; set; }
 
         #endregion Property
@@ -31,7 +31,7 @@ namespace Youtube_DL.ViewModel
 
         public MainViewModel()
         {
-            MainVideoList = SettingLocator.settings.Collection;
+            MainVideoList = new ObservableCollection<YoutubeVideoModel>();
             _AddButton = new Command(AddViewShow);
             _AddToClipboard = new Command(AddToClipboard);
             MainVideoList.CollectionChanged += (o,s) => OnPropertyChanged(nameof(ShowHsVideoText));
@@ -42,23 +42,6 @@ namespace Youtube_DL.ViewModel
             if (Clipboard.ContainsText())
             {
                 string ClipBoardText = Clipboard.GetText();
-
-                if (true)
-                {
-                    try
-                    {
-                        var info = await DialogHost.Show(new LoadingView(), "MainDialog");
-                        MainVideoList.Add((YoutubeVideoModel)(info));
-                    }
-                    catch (Exception e)
-                    {
-                        MessageBox.Show(e.Message);
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("Ссылка не валидна");
-                }
             }
         }
 
@@ -67,7 +50,8 @@ namespace Youtube_DL.ViewModel
             try
             {
                 var videoInfo = await DialogHost.Show(new AddVideoPopup());
-                if (videoInfo is null || videoInfo is not YoutubeVideoModel) return;
+
+                if (videoInfo == null) return;
 
                 MainVideoList.Add(videoInfo as YoutubeVideoModel);
             }

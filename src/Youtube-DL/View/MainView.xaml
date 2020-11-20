@@ -68,37 +68,39 @@
                                             TextWrapping="Wrap" />
 
                                         <Grid Grid.Row="1">
-                                            <!--  DownloadInfo  -->
-                                            <StackPanel Visibility="{Binding Isloading, Converter={StaticResource InverseBoolToVisConverter}}">
-                                                <ComboBox
-                                                    FontSize="12"
-                                                    ItemsSource="{Binding VideoOptions}"
-                                                    Margin="0,2,2,13"
-                                                    SelectedItem="{Binding CurrerntVideoOption}" />
-                                                <Button
-                                                    Command="{Binding Download}"
-                                                    Content="Скачать"
-                                                    Foreground="White"
-                                                    Style="{StaticResource MaterialDesignRaisedButton}" />
-                                            </StackPanel>
-                                            <!--  DownloadView  -->
-                                            <StackPanel Visibility="{Binding Isloading, Converter={StaticResource TrueToVisible}}">
-                                                <Grid Margin="0,5,0,0">
-                                                    <TextBlock
-                                                        HorizontalAlignment="Right"
-                                                        Text="{Binding DownloadPercentage, StringFormat={}{0:n}%}"
-                                                        VerticalAlignment="Center" />
-                                                </Grid>
-                                                <ProgressBar Value="{Binding DownloadPercentage, Mode=OneWay}" />
-                                                <Button
-                                                    Command="{Binding CancelDownload}"
-                                                    Content="Отменить"
-                                                    Foreground="White"
-                                                    Margin="0,18,0,0"
-                                                    Style="{StaticResource MaterialDesignRaisedButton}" />
-                                            </StackPanel>
+                                            <Grid Visibility="{Binding Finished, Converter={StaticResource InverseBoolToVisConverter}}">
+                                                <!--  DownloadInfo  -->
+                                                <StackPanel Visibility="{Binding Isloading, Converter={StaticResource InverseBoolToVisConverter}}">
+                                                    <ComboBox
+                                                        FontSize="12"
+                                                        ItemsSource="{Binding VideoOptions}"
+                                                        Margin="0,2,2,13"
+                                                        SelectedItem="{Binding CurrerntVideoOption}" />
+                                                    <Button
+                                                        Command="{Binding Download}"
+                                                        Content="Скачать"
+                                                        Foreground="White"
+                                                        Style="{StaticResource MaterialDesignRaisedButton}" />
+                                                </StackPanel>
+                                                <!--  DownloadView  -->
+                                                <StackPanel Visibility="{Binding Isloading, Converter={StaticResource TrueToVisible}}">
+                                                    <Grid Margin="0,5,0,0">
+                                                        <TextBlock
+                                                            HorizontalAlignment="Right"
+                                                            Text="{Binding DownloadPercentage, StringFormat={}{0:n}%}"
+                                                            VerticalAlignment="Center" />
+                                                    </Grid>
+                                                    <ProgressBar Value="{Binding DownloadPercentage, Mode=OneWay}" />
+                                                    <Button
+                                                        Command="{Binding CancelDownload}"
+                                                        Content="Отменить"
+                                                        Foreground="White"
+                                                        Margin="0,18,0,0"
+                                                        Style="{StaticResource MaterialDesignRaisedButton}" />
+                                                </StackPanel>
+                                            </Grid>
+                                            <Grid />
                                         </Grid>
-
                                     </Grid>
                                 </Grid>
                             </materialDesign:Card>

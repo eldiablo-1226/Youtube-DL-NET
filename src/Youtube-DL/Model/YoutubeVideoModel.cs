@@ -1,19 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using MaterialDesignThemes.Wpf;
 using Youtube_DL.Core;
-using Youtube_DL.Helps;
-using YoutubeExplode;
 using YoutubeExplode.Videos;
-using ByteConverter = Youtube_DL.Helps.ByteConverter;
 
 namespace Youtube_DL.Model
 {
@@ -21,7 +13,7 @@ namespace Youtube_DL.Model
     public class YoutubeVideoModel : BaseViewModel
     {
         private YoutubeVideoService _youtubeService = new YoutubeVideoService();
-        private CancellationTokenSource _cancellationToken = new CancellationTokenSource();
+        private CancellationTokenSource? _cancellationToken = new CancellationTokenSource();
         public bool Isloading { get; set; }
         public bool Finished { get; set; }
 
@@ -48,7 +40,7 @@ namespace Youtube_DL.Model
             Download = new Command(StartDownload);
             CancelDownload = new Command(StopDownload);
 
-            progress = new Progress<double>((d => DownloadPercentage = d));
+            progress = new Progress<double>((d => DownloadPercentage = d * 100));
             IsPlaylist = video.Length > 1;
 
             Videos = video;
@@ -69,10 +61,11 @@ namespace Youtube_DL.Model
                 try
                 {
                     _cancellationToken = new CancellationTokenSource();
+                    //var SavePath = YoutubeVideoService.PromptSaveFilePath(CurrerntVideo.Title, videoOption.Format);
                     Isloading = true;
                     for (int i = 0; i < Videos.Length; i++)
                     {
-                        await DownloadAsync(Videos[i], CurrerntVideoOption);
+                        //await DownloadAsync(Videos[i], CurrerntVideoOption);
                         CurrerntVideo = Videos[i + 1];
                         Image = CurrerntVideo.Thumbnails.MaxResUrl;
                         Title = CurrerntVideo.Title;
@@ -92,10 +85,15 @@ namespace Youtube_DL.Model
             }
             else
             {
+                var savePath = YoutubeVideoService.PromptSaveFilePath(CurrerntVideo.Title, CurrerntVideoOption.Format);
+                if (savePath == null) return;
+                {
+                    
+                }
                 try
                 {
                     Isloading = true;
-                    await DownloadAsync(CurrerntVideo, CurrerntVideoOption);
+                    await DownloadAsync(CurrerntVideo, CurrerntVideoOption, savePath);
                     Finished = true;
                 }
                 catch (Exception e)
@@ -105,17 +103,20 @@ namespace Youtube_DL.Model
                 finally
                 {
                     Isloading = false;
+                    _cancellationToken?.Dispose();
+                    _cancellationToken = null;
                 }
             }
         }
 
-        public Task DownloadAsync(Video video, VideoDownloadOption option) => _youtubeService.DownloadAsync(option, video, progress, _cancellationToken.Token);
+        public Task DownloadAsync(Video video, VideoDownloadOption option, string SaveFilePath) => 
+            _youtubeService.DownloadAsync(option, video, progress, _cancellationToken.Token, SaveFilePath);
 
         public void StopDownload()
         {
             if (Isloading)
             {
-                _cancellationToken.Cancel();
+                _cancellationToken?.Cancel();
             }
         }
     }

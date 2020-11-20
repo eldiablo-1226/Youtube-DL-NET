@@ -2,6 +2,6 @@
 {
     public static class SettingLocator
     {
-        public static Settings settings { get; } = new Settings();
+        public static Settings settings = new Settings();
     }
 }

@@ -22,15 +22,14 @@ namespace Youtube_DL.Core
 
         public bool IsLoading;
 
-        public async Task DownloadAsync(VideoDownloadOption? videoOption, Video downloaVideo, Progress<double> progress, CancellationToken cancellationToken)
+        public async Task DownloadAsync(VideoDownloadOption? videoOption, Video downloaVideo, Progress<double> progress, CancellationToken cancellationToken, string fileName)
         {
             if (videoOption == null)
                 throw new InvalidOperationException($"Video '{downloaVideo.Id}' contains no streams.");
 
-            string path = PromptSaveFilePath(downloaVideo.Title, videoOption.Format);
-            if(path == null) throw new AggregateException("SelectPath");
+            if(fileName == null) throw new ArgumentNullException("SelectPath");
 
-            var conversion = new ConversionRequestBuilder(path)
+            var conversion = new ConversionRequestBuilder(fileName)
                 .SetFormat(videoOption.Format)
                 .SetPreset(ConversionPreset.Medium)
                 .Build();
@@ -45,12 +44,10 @@ namespace Youtube_DL.Core
         }
         public async Task<IReadOnlyList<VideoDownloadOption>> GetVideoDownloadOptionsAsync(string videoId)
         {
-            var streamManifest = await new YoutubeClient().Videos.Streams.GetManifestAsync(videoId);
+            var streamManifest = await _youtube.Videos.Streams.GetManifestAsync(videoId);
 
-            // Using a set ensures only one download option per format/quality is provided
             var options = new HashSet<VideoDownloadOption>();
 
-            // Video+audio options
             var videoStreams = streamManifest
                 .GetVideo()
                 .OrderByDescending(v => v.VideoQuality)
@@ -62,14 +59,12 @@ namespace Youtube_DL.Core
                 var label = streamInfo.VideoQualityLabel;
                 var videoSize = streamInfo.Size.TotalBytes.SizeSuffix();
 
-                // Muxed streams are standalone
                 if (streamInfo is MuxedStreamInfo)
                 {
                     options.Add(new VideoDownloadOption(format, label,  videoSize, streamInfo));
                     continue;
                 }
 
-                // Get audio with matching format, if possible
                 var audioStreamInfo =
                     (IStreamInfo?)
                     streamManifest
@@ -89,7 +84,6 @@ namespace Youtube_DL.Core
                 }
             }
 
-            // Audio-only options
             var bestAudioOnlyStreamInfo = streamManifest
                 .GetAudio()
                 .OrderByDescending(s => s.Container == Container.WebM)
@@ -175,16 +169,17 @@ namespace Youtube_DL.Core
 
     public partial class YoutubeVideoService
     {
-        private static string? PromptSaveFilePath(string defaultFileName, string filter)
+
+        public static string? PromptSaveFilePath(string defaultFileName, string filter)
         {
             var dialog = new SaveFileDialog
             {
-                FileName = defaultFileName,
+                FileName = SanitizeFileName(defaultFileName),
                 Filter = $"{filter} files|*.{filter}|All Files|*.*",
                 AddExtension = true,
                 DefaultExt = Path.GetExtension(defaultFileName) ?? ""
             };
-            return dialog.ShowDialog() == true ? SanitizeFileName(dialog.FileName) : null;
+            return dialog.ShowDialog() == true ? dialog.FileName : null;
         }
         private static string SanitizeFileName(string fileName)
         {
@@ -196,11 +191,11 @@ namespace Youtube_DL.Core
         public static VideoType TryParce(string videoUri)
         {
             var videiId = TryParseVideoId(videoUri);
-            if (videiId is not null)
+            if (videiId != null)
                 return VideoType.Video;
 
             var playListiId = TryParsePlaylistId(videoUri);
-            if (playListiId is not null)
+            if (playListiId != null)
                 return VideoType.PlayList;
 
             return VideoType.none;
