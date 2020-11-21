@@ -25,6 +25,7 @@ namespace Youtube_DL.ViewModel
 
         public Command _AddButton { get; }
         public Command _AddToClipboard { get; }
+        public Command DeleteIteam { get; }
 
 
         #endregion Command
@@ -32,8 +33,12 @@ namespace Youtube_DL.ViewModel
         public MainViewModel()
         {
             MainVideoList = new ObservableCollection<YoutubeVideoModel>();
+
+            /// Command
             _AddButton = new Command(AddViewShow);
             _AddToClipboard = new Command(AddToClipboard);
+            DeleteIteam = new Command(((s) => MainVideoList.Remove(s as YoutubeVideoModel)));
+
             MainVideoList.CollectionChanged += (o,s) => OnPropertyChanged(nameof(ShowHsVideoText));
         }
 

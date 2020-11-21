@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,7 +22,8 @@ namespace Youtube_DL.Model
         public bool IsPlaylist { get; }
 
         public string Image { get; set; }
-        public  string Title { get; set; }
+        public string Title { get; set; }
+        public string? SavedPath { get; set; }
 
         public double DownloadPercentage { get; set; }
 
@@ -28,6 +31,10 @@ namespace Youtube_DL.Model
 
         public Command Download { get; set; }
         public Command CancelDownload { get; set; }
+
+        public Command OpenFolder { get; set; }
+        public Command OpenFile { get; set; }
+
 
         private readonly Video[] Videos;
         public Video CurrerntVideo;
@@ -37,6 +44,16 @@ namespace Youtube_DL.Model
 
         public YoutubeVideoModel(Video[] video, IReadOnlyList<VideoDownloadOption> options)
         {
+            OpenFile = new Command(() => {
+                new Process
+                {
+                    StartInfo = new ProcessStartInfo(SavedPath)
+                    {
+                        UseShellExecute = true
+                    }
+                }.Start();
+            });
+            OpenFolder = new Command(() => { Process.Start("explorer.exe", Path.GetDirectoryName(SavedPath)); });
             Download = new Command(StartDownload);
             CancelDownload = new Command(StopDownload);
 
@@ -86,6 +103,7 @@ namespace Youtube_DL.Model
             else
             {
                 var savePath = YoutubeVideoService.PromptSaveFilePath(CurrerntVideo.Title, CurrerntVideoOption.Format);
+                SavedPath = savePath;
                 if (savePath == null) return;
                 {
                     
@@ -108,6 +126,7 @@ namespace Youtube_DL.Model
                 }
             }
         }
+
 
         public Task DownloadAsync(Video video, VideoDownloadOption option, string SaveFilePath) => 
             _youtubeService.DownloadAsync(option, video, progress, _cancellationToken.Token, SaveFilePath);
