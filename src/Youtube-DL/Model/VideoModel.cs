@@ -1,26 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Youtube_DL.Helps;
 using YoutubeExplode.Videos.Streams;
 
 namespace Youtube_DL.Model
 {
     public partial class VideoDownloadOption
     {
+        public bool IsPlaylist { get; }
         public string Format { get; }
         public string Label { get; }
         public string Size { get; set; }
 
-        public IReadOnlyList<IStreamInfo> StreamInfos { get; }
+        public IReadOnlyList<IStreamInfo>? StreamInfos { get; }
 
         public VideoQuality? Quality =>
-            StreamInfos.OfType<IVideoStreamInfo>()
+            StreamInfos?.OfType<IVideoStreamInfo>()
                 .Select(s => s.VideoQuality)
                 .OrderByDescending(q => q)
                 .FirstOrDefault();
 
+        public VideoQualityPreference QualityPreference { get; }
+
         public Framerate? Framerate =>
-            StreamInfos.OfType<IVideoStreamInfo>()
+            StreamInfos?.OfType<IVideoStreamInfo>()
                 .Select(s => s.Framerate)
                 .OrderByDescending(f => f)
                 .FirstOrDefault();
@@ -37,6 +41,15 @@ namespace Youtube_DL.Model
             StreamInfos = streamInfos;
         }
 
+        public VideoDownloadOption(VideoQualityPreference quality)
+        {
+            IsPlaylist = true;
+            QualityPreference = quality;
+            Format = "";
+            Size = "";
+            Label = quality.GetDisplayName();
+        }
+
         public VideoDownloadOption(
             string format,
             string label,
@@ -44,7 +57,7 @@ namespace Youtube_DL.Model
             params IStreamInfo[] streamInfos)
             : this(format, label, size, (IReadOnlyList<IStreamInfo>)streamInfos) { }
 
-        public override string ToString() => $"{Label} / {Format} / {Size}";
+        public override string ToString() => $"{Label}  {Format}  {Size}";
     }
 
     public partial class VideoDownloadOption : IEquatable<VideoDownloadOption>

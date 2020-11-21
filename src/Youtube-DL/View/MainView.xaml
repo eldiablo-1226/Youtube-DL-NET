@@ -85,6 +85,10 @@
                                                                 HorizontalAlignment="Right"
                                                                 VerticalAlignment="Center"
                                                                 Text="{Binding DownloadPercentage, StringFormat={}{0:n}%}" />
+                                                        <TextBlock
+                                                            HorizontalAlignment="Left"
+                                                            VerticalAlignment="Center"
+                                                            Text="{Binding PlaylistCount}" />
                                                     </Grid>
                                                     <ProgressBar Value="{Binding DownloadPercentage, Mode=OneWay}" />
                                                     <Button
@@ -105,21 +109,16 @@
                                                             <materialDesign:PackIcon Kind="FolderOpen" />
                                                         </Button>
                                                         <Button Style="{StaticResource MaterialDesignIconButton}"
-                                                                Command="{Binding OpenFile}">
+                                                                Command="{Binding OpenFile}" Visibility="{Binding IsPlaylist, Converter={StaticResource InverseBoolToVisConverter}}">
                                                             <materialDesign:PackIcon Kind="MotionPlayOutline" />
                                                         </Button>
                                                     </StackPanel>
                                                     <Button
                                                         Margin="0,4,0,10"
-                                                        Foreground="ForestGreen"
                                                         Style="{StaticResource MaterialDesignOutlinedButton}"
+                                                        Content="Удалить"
                                                         Command="{Binding DataContext.DeleteIteam, ElementName=MainGrid}"
-                                                        CommandParameter="{Binding}">
-                                                        <StackPanel Orientation="Horizontal">
-                                                            <materialDesign:PackIcon Kind="CheckCircleOutline" Margin="0,2,5,0"/>
-                                                            <TextBlock Text="Finished"/>
-                                                        </StackPanel>
-                                                    </Button>
+                                                        CommandParameter="{Binding}"/>
                                                 </StackPanel>
                                             </Grid>
                                         </Grid>

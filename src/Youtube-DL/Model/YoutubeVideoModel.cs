@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using Youtube_DL.Core;
+using Youtube_DL.Helps;
 using YoutubeExplode.Videos;
 
 namespace Youtube_DL.Model
@@ -23,6 +24,8 @@ namespace Youtube_DL.Model
 
         public string Image { get; set; }
         public string Title { get; set; }
+        public string PlaylistCount { get; set; } = "";
+
         public string? SavedPath { get; set; }
 
         public double DownloadPercentage { get; set; }
@@ -55,8 +58,8 @@ namespace Youtube_DL.Model
             Videos = video;
             CurrerntVideo = Videos.FirstOrDefault();
 
-            Image = CurrerntVideo.Thumbnails.MaxResUrl;
-            Title = CurrerntVideo.Title;
+            Image = CurrerntVideo?.Thumbnails.MaxResUrl ?? "";
+            Title = CurrerntVideo?.Title ?? "Unknow";
 
             VideoOptions = options;
             CurrerntVideoOption = VideoOptions.FirstOrDefault();
@@ -64,20 +67,30 @@ namespace Youtube_DL.Model
 
         public async void StartDownload()
         {
-            if (Isloading || CurrerntVideo == null) return;
+            if (Isloading) return;
             if (IsPlaylist)
             {
                 try
                 {
                     _cancellationToken = new CancellationTokenSource();
-                    //var SavePath = YoutubeVideoService.PromptSaveFilePath(CurrerntVideo.Title, videoOption.Format);
+
+                    string? savePath = YoutubeVideoService.PromptDirectoryPath();
+                    if (savePath == null) return;
+                    SavedPath = savePath;
+
                     Isloading = true;
                     for (int i = 0; i < Videos.Length; i++)
                     {
-                        //await DownloadAsync(Videos[i], CurrerntVideoOption);
-                        CurrerntVideo = Videos[i + 1];
-                        Image = CurrerntVideo.Thumbnails.MaxResUrl;
-                        Title = CurrerntVideo.Title;
+                        PlaylistCount = $"{i+1}/{Videos.Length}";
+                        var options = await _youtubeService.TryGetBestVideoDownloadOptionAsync(Videos[i].Id, "mp4",
+                            CurrerntVideoOption.QualityPreference);
+                        await DownloadAsync(Videos[i], options, Path.Combine(savePath ,YoutubeVideoService.FixFileName(Videos[i].Title) + ".mp4") );
+                        if (i + 1 < Videos.Length)
+                        {
+                            CurrerntVideo = Videos[i + 1];
+                            Image = CurrerntVideo.Thumbnails.MaxResUrl;
+                            Title = CurrerntVideo.Title;
+                        }
                     }
                     Finished = true;
                 }

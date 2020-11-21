@@ -33,21 +33,21 @@ namespace Youtube_DL.ViewModel
             {
                 IsLoading = true;
                 var videos = await _youtubeservise.GetVideosAsync(url);
-                IReadOnlyList<VideoDownloadOption> videoOptions;
-                if (videos.Length > 1)
-                {
-                    videoOptions = _youtubeservise.GetDownloadOptionPlaylist();
-                }
-                else
+                IReadOnlyList<VideoDownloadOption>? videoOptions = null;
+                if (videos.Length == 1)
                 {
                     videoOptions = await _youtubeservise.GetVideoDownloadOptionsAsync(url);
                 }
+                else
+                {
+                    videoOptions = YoutubeVideoService.GetOptionPlaylist();
+                }
                 IsLoading = false;
-                DialogHost.Close("MainDialog", new YoutubeVideoModel(videos.ToArray(), videoOptions));
+                DialogHost.Close("MainDialog", new YoutubeVideoModel(videos, videoOptions));
             }
-            catch (ArgumentException)
+            catch (ArgumentException e)
             {
-                MessageBox.Show("Ссылка не правильно");
+                MessageBox.Show(e.Message);
             }
             catch (Exception e)
             {

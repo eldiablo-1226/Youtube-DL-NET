@@ -44,19 +44,6 @@ namespace Youtube_DL.Core
             );
         }
 
-        public IReadOnlyList<VideoDownloadOption> GetDownloadOptionPlaylist()
-        {
-            var qualitys = Enum.GetValues(typeof(VideoQualityPreference)).Cast<VideoQualityPreference>().ToArray();
-            var options = new HashSet<VideoDownloadOption>();
-
-            foreach (var quality in qualitys)
-            {
-                options.Add(new VideoDownloadOption(quality.ToString(), "", "", quality));
-            }
-
-            return options.ToArray();
-        }
-
         public async Task<IReadOnlyList<VideoDownloadOption>> GetVideoDownloadOptionsAsync(string videoId)
         {
             var streamManifest = await _youtube.Videos.Streams.GetManifestAsync(videoId);
@@ -189,7 +176,7 @@ namespace Youtube_DL.Core
         {
             var dialog = new SaveFileDialog
             {
-                FileName = SanitizeFileName(defaultFileName),
+                FileName = FixFileName(defaultFileName),
                 Filter = $"{filter} files|*.{filter}|All Files|*.*",
                 AddExtension = true,
                 DefaultExt = Path.GetExtension(defaultFileName) ?? ""
@@ -197,7 +184,7 @@ namespace Youtube_DL.Core
             return dialog.ShowDialog() == true ? dialog.FileName : null;
         }
 
-        public string? PromptDirectoryPath(string defaultDirPath = "")
+        public static string? PromptDirectoryPath(string defaultDirPath = "")
         {
             // Create dialog
             var dialog = new VistaFolderBrowserDialog
@@ -209,13 +196,14 @@ namespace Youtube_DL.Core
             return dialog.ShowDialog() == true ? dialog.SelectedPath : null;
         }
 
-        private static string SanitizeFileName(string fileName)
+        public static string FixFileName(string fileName)
         {
             foreach (var invalidChar in Path.GetInvalidFileNameChars())
                 fileName = fileName.Replace(invalidChar, '_');
 
             return fileName;
         }
+
         public static VideoType TryParce(string videoUri)
         {
             var videiId = TryParseVideoId(videoUri);
@@ -227,6 +215,16 @@ namespace Youtube_DL.Core
                 return VideoType.PlayList;
 
             return VideoType.none;
+        }
+
+        public static IReadOnlyList<VideoDownloadOption> GetOptionPlaylist()
+        {
+            HashSet<VideoDownloadOption> optinon = new HashSet<VideoDownloadOption>();
+            foreach (var videoQualityPreference in Enum.GetValues(typeof(VideoQualityPreference)).Cast<VideoQualityPreference>())
+            {
+                optinon.Add(new VideoDownloadOption(videoQualityPreference));
+            }
+            return optinon.ToArray();
         }
 
         public static bool TryParceBool(string videoUri)
