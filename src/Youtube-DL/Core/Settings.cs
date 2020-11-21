@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using Tyrrrz.Settings;
 using Youtube_DL.Helps;
 using Youtube_DL.Model;
@@ -16,8 +15,8 @@ namespace Youtube_DL.Core
             get => _savePath;
             set => Set(ref _savePath, value);
         }
-        
-        public ObservableCollection<YoutubeVideoModel> Collection 
+
+        public ObservableCollection<YoutubeVideoModel> Collection
         {
             get
             {
@@ -29,7 +28,7 @@ namespace Youtube_DL.Core
             }
             set => Set(ref _collection, value);
         }
-        
+
         public Settings()
         {
             Configuration.FileName = "Settings.dat";

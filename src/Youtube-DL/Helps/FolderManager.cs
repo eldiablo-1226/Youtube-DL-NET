@@ -19,18 +19,17 @@ namespace Youtube_DL.Helps
             "{7D1D3A04-DEBB-4115-95CF-2F29DA2920DA}", // SavedSearches
             "{18989B1D-99B5-455B-841C-AB7C74E4DDFC}", // Videos
         };
-    
-        
+
         public static string GetPath(FolderEnum folderEnum)
         {
             return GetPath(folderEnum, false);
         }
-    
+
         public static string GetPath(FolderEnum folderEnum, bool defaultUser)
         {
             return GetPath(folderEnum, FolderFlags.DontVerify, defaultUser);
         }
-    
+
         private static string GetPath(FolderEnum folderEnum, FolderFlags flags,
             bool defaultUser)
         {
@@ -48,25 +47,25 @@ namespace Youtube_DL.Helps
                     + "be available on this system.", result);
             }
         }
-    
+
         [DllImport("Shell32.dll")]
         private static extern int SHGetKnownFolderPath(
-            [MarshalAs(UnmanagedType.LPStruct)]Guid rfid, uint dwFlags, IntPtr hToken,
+            [MarshalAs(UnmanagedType.LPStruct)] Guid rfid, uint dwFlags, IntPtr hToken,
             out IntPtr ppszPath);
-    
+
         [Flags]
         private enum FolderFlags : uint
         {
-            SimpleIDList              = 0x00000100,
-            NotParentRelative         = 0x00000200,
-            DefaultPath               = 0x00000400,
-            Init                      = 0x00000800,
-            NoAlias                   = 0x00001000,
-            DontUnexpand              = 0x00002000,
-            DontVerify                = 0x00004000,
-            Create                    = 0x00008000,
+            SimpleIDList = 0x00000100,
+            NotParentRelative = 0x00000200,
+            DefaultPath = 0x00000400,
+            Init = 0x00000800,
+            NoAlias = 0x00001000,
+            DontUnexpand = 0x00002000,
+            DontVerify = 0x00004000,
+            Create = 0x00008000,
             NoAppcontainerRedirection = 0x00010000,
-            AliasOnly                 = 0x80000000
+            AliasOnly = 0x80000000
         }
     }
 

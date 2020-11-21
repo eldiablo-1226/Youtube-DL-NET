@@ -1,21 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MaterialDesignThemes.Wpf;
+using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using MaterialDesignThemes.Wpf;
 using Youtube_DL.Core;
-using Youtube_DL.Model;
-using Youtube_DL.ViewModel;
 using YoutubeExplode.Videos;
 
 namespace Youtube_DL.View
@@ -32,7 +19,7 @@ namespace Youtube_DL.View
         {
             InitializeComponent();
         }
-        
+
         public LoadingView(string url)
         {
             InitializeComponent();
@@ -59,6 +46,5 @@ namespace Youtube_DL.View
 
             DialogHost.Close("MainView", videos);
         }
-
     }
 }

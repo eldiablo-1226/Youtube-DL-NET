@@ -8,8 +8,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-
-
     <Grid>
         <StackPanel Margin="20,15">
             <TextBlock
@@ -51,7 +49,6 @@
                     Content="Отмена"
                     IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBool}}"
                     Style="{StaticResource MaterialDesignFlatButton}" />
-
             </StackPanel>
         </StackPanel>
     </Grid>

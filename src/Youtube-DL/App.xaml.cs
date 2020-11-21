@@ -1,8 +1,6 @@
-﻿using System.Configuration;
-using System.Windows;
-using Youtube_DL.Core;
+﻿using System.Windows;
 
 namespace Youtube_DL
 {
-    public partial class App : Application {}
+    public partial class App : Application { }
 }
