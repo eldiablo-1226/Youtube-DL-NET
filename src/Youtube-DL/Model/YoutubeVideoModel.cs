@@ -44,15 +44,7 @@ namespace Youtube_DL.Model
 
         public YoutubeVideoModel(Video[] video, IReadOnlyList<VideoDownloadOption> options)
         {
-            OpenFile = new Command(() => {
-                new Process
-                {
-                    StartInfo = new ProcessStartInfo(SavedPath)
-                    {
-                        UseShellExecute = true
-                    }
-                }.Start();
-            });
+            OpenFile = new Command(() => { new Process {StartInfo = new ProcessStartInfo(SavedPath) {UseShellExecute = true}}.Start(); });
             OpenFolder = new Command(() => { Process.Start("explorer.exe", Path.GetDirectoryName(SavedPath)); });
             Download = new Command(StartDownload);
             CancelDownload = new Command(StopDownload);

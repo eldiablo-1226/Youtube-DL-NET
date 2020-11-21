@@ -12,6 +12,7 @@ using YoutubeExplode.Playlists;
 using YoutubeExplode.Videos;
 using YoutubeExplode.Videos.Streams;
 using Microsoft.Win32;
+using Ookii.Dialogs.Wpf;
 
 namespace Youtube_DL.Core
 {
@@ -42,6 +43,20 @@ namespace Youtube_DL.Core
                 cancellationToken
             );
         }
+
+        public IReadOnlyList<VideoDownloadOption> GetDownloadOptionPlaylist()
+        {
+            var qualitys = Enum.GetValues(typeof(VideoQualityPreference)).Cast<VideoQualityPreference>().ToArray();
+            var options = new HashSet<VideoDownloadOption>();
+
+            foreach (var quality in qualitys)
+            {
+                options.Add(new VideoDownloadOption(quality.ToString(), "", "", quality));
+            }
+
+            return options.ToArray();
+        }
+
         public async Task<IReadOnlyList<VideoDownloadOption>> GetVideoDownloadOptionsAsync(string videoId)
         {
             var streamManifest = await _youtube.Videos.Streams.GetManifestAsync(videoId);
@@ -181,6 +196,19 @@ namespace Youtube_DL.Core
             };
             return dialog.ShowDialog() == true ? dialog.FileName : null;
         }
+
+        public string? PromptDirectoryPath(string defaultDirPath = "")
+        {
+            // Create dialog
+            var dialog = new VistaFolderBrowserDialog
+            {
+                SelectedPath = defaultDirPath
+            };
+
+            // Show dialog and return result
+            return dialog.ShowDialog() == true ? dialog.SelectedPath : null;
+        }
+
         private static string SanitizeFileName(string fileName)
         {
             foreach (var invalidChar in Path.GetInvalidFileNameChars())

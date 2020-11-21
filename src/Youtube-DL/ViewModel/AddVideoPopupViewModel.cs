@@ -33,7 +33,15 @@ namespace Youtube_DL.ViewModel
             {
                 IsLoading = true;
                 var videos = await _youtubeservise.GetVideosAsync(url);
-                var videoOptions = await _youtubeservise.GetVideoDownloadOptionsAsync(url);
+                IReadOnlyList<VideoDownloadOption> videoOptions;
+                if (videos.Length > 1)
+                {
+                    videoOptions = _youtubeservise.GetDownloadOptionPlaylist();
+                }
+                else
+                {
+                    videoOptions = await _youtubeservise.GetVideoDownloadOptionsAsync(url);
+                }
                 IsLoading = false;
                 DialogHost.Close("MainDialog", new YoutubeVideoModel(videos.ToArray(), videoOptions));
             }
