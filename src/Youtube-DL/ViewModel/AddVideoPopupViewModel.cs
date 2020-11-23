@@ -1,14 +1,11 @@
-﻿using System;
+﻿using MaterialDesignThemes.Wpf;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
-using MaterialDesignThemes.Wpf;
 using Youtube_DL.Core;
 using Youtube_DL.Model;
 using YoutubeExplode;
-using YoutubeExplode.Playlists;
-using YoutubeExplode.Videos;
 
 namespace Youtube_DL.ViewModel
 {
@@ -40,7 +37,7 @@ namespace Youtube_DL.ViewModel
                 }
                 else
                 {
-                    videoOptions = YoutubeVideoService.GetOptionPlaylist();
+                    videoOptions = YoutubeVideoService.GetOptionPlaylist().Reverse().ToArray();
                 }
                 IsLoading = false;
                 DialogHost.Close("MainDialog", new YoutubeVideoModel(videos, videoOptions));
@@ -55,8 +52,5 @@ namespace Youtube_DL.ViewModel
             }
             IsLoading = false;
         }
-
-
     }
 }
-

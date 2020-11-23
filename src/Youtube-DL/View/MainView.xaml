@@ -24,7 +24,7 @@
                 Text="Нет видео для скачивание"
                 Visibility="{Binding ShowHsVideoText, Converter={StaticResource InverseBoolToVisConverter}}" />
             <ScrollViewer Margin="-15" VerticalScrollBarVisibility="Hidden">
-                <ItemsControl ItemsSource="{Binding MainVideoList}">
+                <ItemsControl ItemsSource="{Binding MainVideoList}" x:Name="BindingControl">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <materialDesign:Card
@@ -32,6 +32,7 @@
                                 Margin="20,20"
                                 materialDesign:ShadowAssist.ShadowDepth="Depth5"
                                 UniformCornerRadius="15">
+
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto" />
@@ -45,7 +46,16 @@
                                         <Image
                                             Name="Receiver"
                                             Source="{Binding Image}"
-                                            Stretch="Fill" />
+                                            Stretch="Fill" >
+                                            <Image.ContextMenu>
+                                                <ContextMenu>
+                                                    <MenuItem
+                                                        Command="{Binding DeleteVideo}"
+                                                        CommandParameter="{Binding}"
+                                                        Header="Удалить" />
+                                                </ContextMenu>
+                                            </Image.ContextMenu>
+                                        </Image>
                                     </Grid>
                                     <Grid Grid.Row="1" Margin="20,0">
                                         <Grid.RowDefinitions>
@@ -68,57 +78,60 @@
                                                 <!--  DownloadInfo  -->
                                                 <StackPanel Visibility="{Binding Isloading, Converter={StaticResource InverseBoolToVisConverter}}">
                                                     <ComboBox
-                                                            Margin="0,2,2,13"
-                                                            FontSize="12"
-                                                            ItemsSource="{Binding VideoOptions}"
-                                                            SelectedItem="{Binding CurrerntVideoOption}" />
+                                                        Margin="0,2,2,13"
+                                                        FontSize="12"
+                                                        ItemsSource="{Binding VideoOptions}"
+                                                        SelectedItem="{Binding CurrerntVideoOption}" />
                                                     <Button
-                                                            Command="{Binding Download}"
-                                                            Content="Скачать"
-                                                            Foreground="White"
-                                                            Style="{StaticResource MaterialDesignRaisedButton}" />
+                                                        Command="{Binding Download}"
+                                                        Content="Скачать"
+                                                        Foreground="White"
+                                                        Style="{StaticResource MaterialDesignRaisedButton}" />
                                                 </StackPanel>
                                                 <!--  DownloadView  -->
                                                 <StackPanel Visibility="{Binding Isloading, Converter={StaticResource TrueToVisible}}">
                                                     <Grid Margin="0,5,0,0">
                                                         <TextBlock
-                                                                HorizontalAlignment="Right"
-                                                                VerticalAlignment="Center"
-                                                                Text="{Binding DownloadPercentage, StringFormat={}{0:n}%}" />
+                                                            HorizontalAlignment="Right"
+                                                            VerticalAlignment="Center"
+                                                            Text="{Binding DownloadPercentage, StringFormat={}{0:n}%}" />
                                                         <TextBlock
                                                             HorizontalAlignment="Left"
                                                             VerticalAlignment="Center"
                                                             Text="{Binding PlaylistCount}" />
                                                     </Grid>
-                                                    <ProgressBar Value="{Binding DownloadPercentage, Mode=OneWay}" />
+                                                    <ProgressBar IsIndeterminate="{Binding IsIndeterminate}" Value="{Binding DownloadPercentage, Mode=OneWay}" />
                                                     <Button
-                                                            Margin="0,18,0,0"
-                                                            Command="{Binding CancelDownload}"
-                                                            Content="Отменить"
-                                                            Foreground="White"
-                                                            Style="{StaticResource MaterialDesignRaisedButton}" />
+                                                        Margin="0,18,0,0"
+                                                        Command="{Binding CancelDownload}"
+                                                        Content="Отменить"
+                                                        Foreground="White"
+                                                        Style="{StaticResource MaterialDesignRaisedButton}" />
                                                 </StackPanel>
                                             </Grid>
+                                            <!--  Finished  -->
                                             <Grid Visibility="{Binding Finished, Converter={StaticResource TrueToVisible}}">
                                                 <StackPanel VerticalAlignment="Center">
                                                     <StackPanel
                                                         Margin="5,0"
                                                         HorizontalAlignment="Center"
                                                         Orientation="Horizontal">
-                                                        <Button Style="{StaticResource MaterialDesignIconButton}" Command="{Binding OpenFolder}">
+                                                        <Button Command="{Binding OpenFolder}" Style="{StaticResource MaterialDesignIconButton}">
                                                             <materialDesign:PackIcon Kind="FolderOpen" />
                                                         </Button>
-                                                        <Button Style="{StaticResource MaterialDesignIconButton}"
-                                                                Command="{Binding OpenFile}" Visibility="{Binding IsPlaylist, Converter={StaticResource InverseBoolToVisConverter}}">
+                                                        <Button
+                                                            Command="{Binding OpenFile}"
+                                                            Style="{StaticResource MaterialDesignIconButton}"
+                                                            Visibility="{Binding IsPlaylist, Converter={StaticResource InverseBoolToVisConverter}}">
                                                             <materialDesign:PackIcon Kind="MotionPlayOutline" />
                                                         </Button>
                                                     </StackPanel>
                                                     <Button
                                                         Margin="0,4,0,10"
-                                                        Style="{StaticResource MaterialDesignOutlinedButton}"
-                                                        Content="Удалить"
                                                         Command="{Binding DataContext.DeleteIteam, ElementName=MainGrid}"
-                                                        CommandParameter="{Binding}"/>
+                                                        CommandParameter="{Binding}"
+                                                        Content="Удалить"
+                                                        Style="{StaticResource MaterialDesignOutlinedButton}" />
                                                 </StackPanel>
                                             </Grid>
                                         </Grid>
@@ -163,6 +176,4 @@
             </Button.ContextMenu>
         </Button>
     </Grid>
-
-
 </UserControl>

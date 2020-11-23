@@ -7,7 +7,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using Youtube_DL.Core;
-using Youtube_DL.Helps;
 using YoutubeExplode.Videos;
 
 namespace Youtube_DL.Model
@@ -20,6 +19,7 @@ namespace Youtube_DL.Model
         public bool Isloading { get; set; }
         public bool Finished { get; set; }
 
+        public bool IsIndeterminate { get; set; }
         public bool IsPlaylist { get; }
 
         public string Image { get; set; }
@@ -37,7 +37,7 @@ namespace Youtube_DL.Model
 
         public Command OpenFolder { get; set; }
         public Command OpenFile { get; set; }
-
+        public Command DeleteVideo { get; set; }
 
         private readonly Video[] Videos;
         public Video CurrerntVideo;
@@ -47,8 +47,8 @@ namespace Youtube_DL.Model
 
         public YoutubeVideoModel(Video[] video, IReadOnlyList<VideoDownloadOption> options)
         {
-            OpenFile = new Command(() => { new Process {StartInfo = new ProcessStartInfo(SavedPath) {UseShellExecute = true}}.Start(); });
-            OpenFolder = new Command(() => { Process.Start("explorer.exe", Path.GetDirectoryName(SavedPath)); });
+            OpenFile = new Command(OpenFilePath);
+            OpenFolder = new Command(OpenFolderPath);
             Download = new Command(StartDownload);
             CancelDownload = new Command(StopDownload);
 
@@ -81,15 +81,28 @@ namespace Youtube_DL.Model
                     Isloading = true;
                     for (int i = 0; i < Videos.Length; i++)
                     {
-                        PlaylistCount = $"{i+1}/{Videos.Length}";
-                        var options = await _youtubeService.TryGetBestVideoDownloadOptionAsync(Videos[i].Id, "mp4",
-                            CurrerntVideoOption.QualityPreference);
-                        await DownloadAsync(Videos[i], options, Path.Combine(savePath ,YoutubeVideoService.FixFileName(Videos[i].Title) + ".mp4") );
-                        if (i + 1 < Videos.Length)
+                        try
                         {
-                            CurrerntVideo = Videos[i + 1];
-                            Image = CurrerntVideo.Thumbnails.MaxResUrl;
-                            Title = CurrerntVideo.Title;
+                            PlaylistCount = $"{i + 1}/{Videos.Length}";
+                            DownloadPercentage = 0;
+                            IsIndeterminate = true;
+
+                            var options = await _youtubeService.TryGetBestVideoDownloadOptionAsync(Videos[i].Id, "mp4",
+                                CurrerntVideoOption.QualityPreference);
+
+                            IsIndeterminate = false;
+                            
+                            await DownloadAsync(Videos[i], options, Path.Combine(savePath, YoutubeVideoService.FixFileName(Videos[i].Title) + ".mp4"));
+                            if (i + 1 < Videos.Length)
+                            {
+                                CurrerntVideo = Videos[i + 1];
+                                Image = CurrerntVideo.Thumbnails.MaxResUrl;
+                                Title = CurrerntVideo.Title;
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e.Message);
                         }
                     }
                     Finished = true;
@@ -111,7 +124,6 @@ namespace Youtube_DL.Model
                 SavedPath = savePath;
                 if (savePath == null) return;
                 {
-                    
                 }
                 try
                 {
@@ -132,8 +144,7 @@ namespace Youtube_DL.Model
             }
         }
 
-
-        public Task DownloadAsync(Video video, VideoDownloadOption option, string SaveFilePath) => 
+        public Task DownloadAsync(Video video, VideoDownloadOption option, string SaveFilePath) =>
             _youtubeService.DownloadAsync(option, video, progress, _cancellationToken.Token, SaveFilePath);
 
         public void StopDownload()
@@ -141,6 +152,31 @@ namespace Youtube_DL.Model
             if (Isloading)
             {
                 _cancellationToken?.Cancel();
+            }
+        }
+
+        private void OpenFilePath()
+        {
+            if(!IsPlaylist)
+                try
+                {
+                    new Process { StartInfo = new ProcessStartInfo(SavedPath) { UseShellExecute = true } }.Start();
+                }
+                catch (Exception)
+                {
+                    // ignored
+                }
+        }
+
+        private void OpenFolderPath()
+        {
+            try
+            {
+                Process.Start("explorer.exe", IsPlaylist ? SavedPath : Path.GetDirectoryName(SavedPath));
+            }
+            catch (Exception)
+            {
+                // ignored
             }
         }
     }

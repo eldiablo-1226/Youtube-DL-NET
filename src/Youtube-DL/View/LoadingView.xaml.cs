@@ -1,8 +1,11 @@
 ﻿using MaterialDesignThemes.Wpf;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using Youtube_DL.Core;
+using Youtube_DL.Model;
 using YoutubeExplode.Videos;
 
 namespace Youtube_DL.View
@@ -29,22 +32,25 @@ namespace Youtube_DL.View
 
         private async void LoadingView_Loaded(object sender, RoutedEventArgs e)
         {
-            Video[] videos = null;
-
             try
             {
-                videos = await _VideoService.GetVideosAsync(_url);
-            }
-            catch (ArgumentException)
-            {
-                MessageBox.Show("Ссылка не правильно");
+                var videos = await _VideoService.GetVideosAsync(_url);
+                IReadOnlyList<VideoDownloadOption>? videoOptions = null;
+                if (videos.Length == 1)
+                {
+                    videoOptions = await _VideoService.GetVideoDownloadOptionsAsync(_url);
+                }
+                else
+                {
+                    videoOptions = YoutubeVideoService.GetOptionPlaylist().Reverse().ToArray();
+                }
+
+                DialogHost.Close("MainDialog", new YoutubeVideoModel(videos, videoOptions));
             }
             catch (Exception)
             {
-                MessageBox.Show("Ошибка сети");
+                DialogHost.Close("MainDialog");
             }
-
-            DialogHost.Close("MainView", videos);
         }
     }
 }

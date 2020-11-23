@@ -1,5 +1,5 @@
-﻿using System;
-using MaterialDesignThemes.Wpf;
+﻿using MaterialDesignThemes.Wpf;
+using System;
 using System.Collections.ObjectModel;
 using System.Windows;
 using Youtube_DL.Core;
@@ -27,7 +27,6 @@ namespace Youtube_DL.ViewModel
         public Command _AddToClipboard { get; }
         public Command DeleteIteam { get; }
 
-
         #endregion Command
 
         public MainViewModel()
@@ -37,9 +36,9 @@ namespace Youtube_DL.ViewModel
             /// Command
             _AddButton = new Command(AddViewShow);
             _AddToClipboard = new Command(AddToClipboard);
-            DeleteIteam = new Command(((s) => MainVideoList.Remove(s as YoutubeVideoModel)));
+            DeleteIteam = new Command(DeleteIteamVoid);
 
-            MainVideoList.CollectionChanged += (o,s) => OnPropertyChanged(nameof(ShowHsVideoText));
+            MainVideoList.CollectionChanged += (o, s) => OnPropertyChanged(nameof(ShowHsVideoText));
         }
 
         private async void AddToClipboard()
@@ -47,6 +46,13 @@ namespace Youtube_DL.ViewModel
             if (Clipboard.ContainsText())
             {
                 string ClipBoardText = Clipboard.GetText();
+
+                var videoInfo = await DialogHost.Show(new LoadingView(ClipBoardText));
+
+                if (videoInfo == null) return;
+                var Info = videoInfo as YoutubeVideoModel;
+                Info.DeleteVideo = DeleteIteam;
+                MainVideoList.Add(Info);
             }
         }
 
@@ -58,12 +64,23 @@ namespace Youtube_DL.ViewModel
 
                 if (videoInfo == null) return;
 
-                MainVideoList.Add(videoInfo as YoutubeVideoModel);
+                var Info = videoInfo as YoutubeVideoModel;
+                Info.DeleteVideo = DeleteIteam;
+                MainVideoList.Add(Info);
             }
             catch (Exception e)
             {
                 MessageBox.Show(e.Message);
             }
         }
+
+        private void DeleteIteamVoid(object s)
+        {
+            if (s is YoutubeVideoModel)
+            {
+                MainVideoList.Remove(s as YoutubeVideoModel);
+            }
+        }
     }
+
 }

@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Input;
-using Youtube_DL.Core;
-using Youtube_DL.Model;
-using YoutubeExplode.Videos;
 
 namespace Youtube_DL
 {

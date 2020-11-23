@@ -1,22 +1,21 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using Ookii.Dialogs.Wpf;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Youtube_DL.Helps;
-using YoutubeExplode.Converter;
 using Youtube_DL.Model;
 using YoutubeExplode;
+using YoutubeExplode.Converter;
 using YoutubeExplode.Playlists;
 using YoutubeExplode.Videos;
 using YoutubeExplode.Videos.Streams;
-using Microsoft.Win32;
-using Ookii.Dialogs.Wpf;
 
 namespace Youtube_DL.Core
 {
-
     public partial class YoutubeVideoService
     {
         private readonly YoutubeClient _youtube = new YoutubeClient();
@@ -28,7 +27,7 @@ namespace Youtube_DL.Core
             if (videoOption == null)
                 throw new InvalidOperationException($"Video '{downloaVideo.Id}' contains no streams.");
 
-            if(fileName == null) throw new ArgumentNullException("SelectPath");
+            if (fileName == null) throw new ArgumentNullException("SelectPath");
 
             var conversion = new ConversionRequestBuilder(fileName)
                 .SetFormat(videoOption.Format)
@@ -63,7 +62,7 @@ namespace Youtube_DL.Core
 
                 if (streamInfo is MuxedStreamInfo)
                 {
-                    options.Add(new VideoDownloadOption(format, label,  videoSize, streamInfo));
+                    options.Add(new VideoDownloadOption(format, label, videoSize, streamInfo));
                     continue;
                 }
 
@@ -82,7 +81,7 @@ namespace Youtube_DL.Core
 
                 if (audioStreamInfo != null)
                 {
-                    options.Add(new VideoDownloadOption(format, label,  videoSize, streamInfo, audioStreamInfo));
+                    options.Add(new VideoDownloadOption(format, label, videoSize, streamInfo, audioStreamInfo));
                 }
             }
 
@@ -95,17 +94,16 @@ namespace Youtube_DL.Core
             if (bestAudioOnlyStreamInfo != null)
             {
                 options.Add(new VideoDownloadOption("mp3", "Audio", bestAudioOnlyStreamInfo.Size.TotalBytes.SizeSuffix(), bestAudioOnlyStreamInfo));
-                options.Add(new VideoDownloadOption("ogg", "Audio",  bestAudioOnlyStreamInfo.Size.TotalBytes.SizeSuffix(), bestAudioOnlyStreamInfo));
+                options.Add(new VideoDownloadOption("ogg", "Audio", bestAudioOnlyStreamInfo.Size.TotalBytes.SizeSuffix(), bestAudioOnlyStreamInfo));
             }
 
             return options.ToArray();
         }
 
-        public async Task<VideoDownloadOption?> TryGetBestVideoDownloadOptionAsync( string videoId, string format, VideoQualityPreference qualityPreference)
+        public async Task<VideoDownloadOption?> TryGetBestVideoDownloadOptionAsync(string videoId, string format, VideoQualityPreference qualityPreference)
         {
             var options = await GetVideoDownloadOptionsAsync(videoId);
 
-            
             if (string.Equals(format, "mp3", StringComparison.OrdinalIgnoreCase) ||
                 string.Equals(format, "ogg", StringComparison.OrdinalIgnoreCase))
             {
@@ -171,7 +169,6 @@ namespace Youtube_DL.Core
 
     public partial class YoutubeVideoService
     {
-
         public static string? PromptSaveFilePath(string defaultFileName, string filter)
         {
             var dialog = new SaveFileDialog
