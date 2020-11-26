@@ -24,7 +24,7 @@
                 Text="Нет видео для скачивание"
                 Visibility="{Binding ShowHsVideoText, Converter={StaticResource InverseBoolToVisConverter}}" />
             <ScrollViewer Margin="-15" VerticalScrollBarVisibility="Hidden">
-                <ItemsControl ItemsSource="{Binding MainVideoList}" x:Name="BindingControl">
+                <ItemsControl x:Name="BindingControl" ItemsSource="{Binding MainVideoList}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <materialDesign:Card
@@ -46,7 +46,7 @@
                                         <Image
                                             Name="Receiver"
                                             Source="{Binding Image}"
-                                            Stretch="Fill" >
+                                            Stretch="Fill">
                                             <Image.ContextMenu>
                                                 <ContextMenu>
                                                     <MenuItem
@@ -116,12 +116,16 @@
                                                         Margin="5,0"
                                                         HorizontalAlignment="Center"
                                                         Orientation="Horizontal">
-                                                        <Button Command="{Binding OpenFolder}" Style="{StaticResource MaterialDesignIconButton}">
+                                                        <Button
+                                                            Margin="5,2"
+                                                            Command="{Binding OpenFolder}"
+                                                            Style="{StaticResource MaterialDesignOutlinedButton}">
                                                             <materialDesign:PackIcon Kind="FolderOpen" />
                                                         </Button>
                                                         <Button
+                                                            Margin="5,2"
                                                             Command="{Binding OpenFile}"
-                                                            Style="{StaticResource MaterialDesignIconButton}"
+                                                            Style="{StaticResource MaterialDesignOutlinedButton}"
                                                             Visibility="{Binding IsPlaylist, Converter={StaticResource InverseBoolToVisConverter}}">
                                                             <materialDesign:PackIcon Kind="MotionPlayOutline" />
                                                         </Button>

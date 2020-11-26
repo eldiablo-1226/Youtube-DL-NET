@@ -68,12 +68,11 @@ namespace Youtube_DL.Model
         public async void StartDownload()
         {
             if (Isloading) return;
-            if (IsPlaylist)
+            _cancellationToken ??= new CancellationTokenSource();
+            try
             {
-                try
+                if (IsPlaylist)
                 {
-                    _cancellationToken = new CancellationTokenSource();
-
                     string? savePath = YoutubeVideoService.PromptDirectoryPath();
                     if (savePath == null) return;
                     SavedPath = savePath;
@@ -87,12 +86,14 @@ namespace Youtube_DL.Model
                             DownloadPercentage = 0;
                             IsIndeterminate = true;
 
-                            var options = await _youtubeService.TryGetBestVideoDownloadOptionAsync(Videos[i].Id, "mp4",
+                            var options = await _youtubeService.TryGetBestVideoDownloadOptionAsync(Videos[i].Id,
+                                "mp4",
                                 CurrerntVideoOption.QualityPreference);
 
                             IsIndeterminate = false;
-                            
-                            await DownloadAsync(Videos[i], options, Path.Combine(savePath, YoutubeVideoService.FixFileName(Videos[i].Title) + ".mp4"));
+
+                            await DownloadAsync(Videos[i], options,
+                                Path.Combine(savePath, YoutubeVideoService.FixFileName(Videos[i].Title) + ".mp4"));
                             if (i + 1 < Videos.Length)
                             {
                                 CurrerntVideo = Videos[i + 1];
@@ -105,43 +106,33 @@ namespace Youtube_DL.Model
                             Console.WriteLine(e.Message);
                         }
                     }
+
                     Finished = true;
                 }
-                catch (Exception e)
+                else
                 {
-                    MessageBox.Show(e.Message);
-                }
-                finally
-                {
-                    Isloading = false;
-                    _cancellationToken?.Dispose();
-                    _cancellationToken = null;
-                }
-            }
-            else
-            {
-                var savePath = YoutubeVideoService.PromptSaveFilePath(CurrerntVideo.Title, CurrerntVideoOption.Format);
-                SavedPath = savePath;
-                if (savePath == null) return;
-                {
-                }
-                try
-                {
+                    var savePath =
+                        YoutubeVideoService.PromptSaveFilePath(CurrerntVideo.Title, CurrerntVideoOption.Format);
+                    SavedPath = savePath;
+                    if (savePath == null) return;
+
                     Isloading = true;
                     await DownloadAsync(CurrerntVideo, CurrerntVideoOption, savePath);
                     Finished = true;
                 }
-                catch (Exception e)
-                {
-                    MessageBox.Show(e.Message);
-                }
-                finally
-                {
-                    Isloading = false;
-                    _cancellationToken?.Dispose();
-                    _cancellationToken = null;
-                }
             }
+            catch (Exception e)
+            {
+                if (e.Message != "A task was canceled." && e.Message != "The operation was canceled.")
+                    MessageBox.Show(e.Message);
+            }
+            finally
+            {
+                Isloading = false;
+                _cancellationToken?.Dispose();
+                _cancellationToken = null;
+            }
+            
         }
 
         public Task DownloadAsync(Video video, VideoDownloadOption option, string SaveFilePath) =>
