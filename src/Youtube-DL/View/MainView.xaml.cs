@@ -8,7 +8,7 @@ namespace Youtube_DL.View
         public MainView()
         {
             InitializeComponent();
-            this.DataContext = new MainViewModel();
+            DataContext = new MainViewModel();
         }
     }
 }

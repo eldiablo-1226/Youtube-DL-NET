@@ -3,7 +3,6 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:helps="clr-namespace:Youtube_DL.Helps"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Padding="15"
@@ -74,9 +73,11 @@
                                             TextWrapping="Wrap" />
 
                                         <Grid Grid.Row="1">
-                                            <Grid Visibility="{Binding Finished, Converter={StaticResource InverseBoolToVisConverter}}">
+                                            <Grid
+                                                Visibility="{Binding Finished, Converter={StaticResource InverseBoolToVisConverter}}">
                                                 <!--  DownloadInfo  -->
-                                                <StackPanel Visibility="{Binding Isloading, Converter={StaticResource InverseBoolToVisConverter}}">
+                                                <StackPanel
+                                                    Visibility="{Binding Isloading, Converter={StaticResource InverseBoolToVisConverter}}">
                                                     <ComboBox
                                                         Margin="0,2,2,13"
                                                         FontSize="12"
@@ -89,7 +90,8 @@
                                                         Style="{StaticResource MaterialDesignRaisedButton}" />
                                                 </StackPanel>
                                                 <!--  DownloadView  -->
-                                                <StackPanel Visibility="{Binding Isloading, Converter={StaticResource TrueToVisible}}">
+                                                <StackPanel
+                                                    Visibility="{Binding Isloading, Converter={StaticResource TrueToVisible}}">
                                                     <Grid Margin="0,5,0,0">
                                                         <TextBlock
                                                             HorizontalAlignment="Right"
@@ -100,7 +102,8 @@
                                                             VerticalAlignment="Center"
                                                             Text="{Binding PlaylistCount}" />
                                                     </Grid>
-                                                    <ProgressBar IsIndeterminate="{Binding IsIndeterminate}" Value="{Binding DownloadPercentage, Mode=OneWay}" />
+                                                    <ProgressBar IsIndeterminate="{Binding IsIndeterminate}"
+                                                                 Value="{Binding DownloadPercentage, Mode=OneWay}" />
                                                     <Button
                                                         Margin="0,18,0,0"
                                                         Command="{Binding CancelDownload}"
@@ -110,7 +113,8 @@
                                                 </StackPanel>
                                             </Grid>
                                             <!--  Finished  -->
-                                            <Grid Visibility="{Binding Finished, Converter={StaticResource TrueToVisible}}">
+                                            <Grid
+                                                Visibility="{Binding Finished, Converter={StaticResource TrueToVisible}}">
                                                 <StackPanel VerticalAlignment="Center">
                                                     <StackPanel
                                                         Margin="5,0"

@@ -11,7 +11,8 @@
                     BaseTheme="Light"
                     PrimaryColor="Red"
                     SecondaryColor="Red" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                <ResourceDictionary
+                    Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Resources/Logo.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Helps/Converter.xaml" />
             </ResourceDictionary.MergedDictionaries>

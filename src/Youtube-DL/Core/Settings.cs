@@ -7,8 +7,15 @@ namespace Youtube_DL.Core
 {
     public class Settings : SettingsManager
     {
-        private string _savePath = FolderManager.GetPath(FolderEnum.Downloads);
         private ObservableCollection<YoutubeVideoModel> _collection;
+        private string _savePath = FolderManager.GetPath(FolderEnum.Downloads);
+
+        public Settings()
+        {
+            Configuration.FileName = "Settings.dat";
+            Configuration.StorageSpace = StorageSpace.Instance;
+            Configuration.SubDirectoryPath = "Data";
+        }
 
         public string SavePath
         {
@@ -20,20 +27,10 @@ namespace Youtube_DL.Core
         {
             get
             {
-                if (_collection == null)
-                {
-                    _collection = new ObservableCollection<YoutubeVideoModel>();
-                }
+                if (_collection == null) _collection = new ObservableCollection<YoutubeVideoModel>();
                 return _collection;
             }
             set => Set(ref _collection, value);
-        }
-
-        public Settings()
-        {
-            Configuration.FileName = "Settings.dat";
-            Configuration.StorageSpace = StorageSpace.Instance;
-            Configuration.SubDirectoryPath = "Data";
         }
     }
 }

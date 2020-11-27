@@ -1,11 +1,11 @@
-﻿using Microsoft.Win32;
-using Ookii.Dialogs.Wpf;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Win32;
+using Ookii.Dialogs.Wpf;
 using Youtube_DL.Helps;
 using Youtube_DL.Model;
 using YoutubeExplode;
@@ -22,7 +22,8 @@ namespace Youtube_DL.Core
 
         public bool IsLoading;
 
-        public async Task DownloadAsync(VideoDownloadOption? videoOption, Video downloaVideo, Progress<double> progress, CancellationToken cancellationToken, string fileName)
+        public async Task DownloadAsync(VideoDownloadOption? videoOption, Video downloaVideo, Progress<double> progress,
+            CancellationToken cancellationToken, string fileName)
         {
             if (videoOption == null)
                 throw new InvalidOperationException($"Video '{downloaVideo.Id}' contains no streams.");
@@ -80,9 +81,7 @@ namespace Youtube_DL.Core
                         .FirstOrDefault();
 
                 if (audioStreamInfo != null)
-                {
                     options.Add(new VideoDownloadOption(format, label, videoSize, streamInfo, audioStreamInfo));
-                }
             }
 
             var bestAudioOnlyStreamInfo = streamManifest
@@ -93,22 +92,23 @@ namespace Youtube_DL.Core
 
             if (bestAudioOnlyStreamInfo != null)
             {
-                options.Add(new VideoDownloadOption("mp3", "Audio", bestAudioOnlyStreamInfo.Size.TotalBytes.SizeSuffix(), bestAudioOnlyStreamInfo));
-                options.Add(new VideoDownloadOption("ogg", "Audio", bestAudioOnlyStreamInfo.Size.TotalBytes.SizeSuffix(), bestAudioOnlyStreamInfo));
+                options.Add(new VideoDownloadOption("mp3", "Audio",
+                    bestAudioOnlyStreamInfo.Size.TotalBytes.SizeSuffix(), bestAudioOnlyStreamInfo));
+                options.Add(new VideoDownloadOption("ogg", "Audio",
+                    bestAudioOnlyStreamInfo.Size.TotalBytes.SizeSuffix(), bestAudioOnlyStreamInfo));
             }
 
             return options.ToArray();
         }
 
-        public async Task<VideoDownloadOption?> TryGetBestVideoDownloadOptionAsync(string videoId, string format, VideoQualityPreference qualityPreference)
+        public async Task<VideoDownloadOption?> TryGetBestVideoDownloadOptionAsync(string videoId, string format,
+            VideoQualityPreference qualityPreference)
         {
             var options = await GetVideoDownloadOptionsAsync(videoId);
 
             if (string.Equals(format, "mp3", StringComparison.OrdinalIgnoreCase) ||
                 string.Equals(format, "ogg", StringComparison.OrdinalIgnoreCase))
-            {
                 return options.FirstOrDefault(o => string.Equals(o.Format, format, StringComparison.OrdinalIgnoreCase));
-            }
 
             var orderedOptions = options
                 .OrderBy(o => o.Quality)
@@ -145,14 +145,15 @@ namespace Youtube_DL.Core
 
         public async Task<Video[]> GetVideosAsync(string url)
         {
-            VideoType typeInfo = TryParce(url);
+            var typeInfo = TryParce(url);
             try
             {
                 if (typeInfo == VideoType.Video)
                 {
-                    var videos = new[] { await _youtube.Videos.GetAsync(url) };
+                    var videos = new[] {await _youtube.Videos.GetAsync(url)};
                     return videos;
                 }
+
                 if (typeInfo == VideoType.PlayList)
                 {
                     var plaList = await _youtube.Playlists.GetVideosAsync(url);
@@ -163,6 +164,7 @@ namespace Youtube_DL.Core
             {
                 throw new Exception("Can't get video info");
             }
+
             throw new AggregateException("Can't parse url");
         }
     }
@@ -217,10 +219,8 @@ namespace Youtube_DL.Core
         public static IReadOnlyList<VideoDownloadOption> GetOptionPlaylist()
         {
             HashSet<VideoDownloadOption> optinon = new HashSet<VideoDownloadOption>();
-            foreach (var videoQualityPreference in Enum.GetValues(typeof(VideoQualityPreference)).Cast<VideoQualityPreference>())
-            {
-                optinon.Add(new VideoDownloadOption(videoQualityPreference));
-            }
+            foreach (var videoQualityPreference in Enum.GetValues(typeof(VideoQualityPreference))
+                .Cast<VideoQualityPreference>()) optinon.Add(new VideoDownloadOption(videoQualityPreference));
             return optinon.ToArray();
         }
 
@@ -229,8 +229,7 @@ namespace Youtube_DL.Core
             var videiId = TryParce(videoUri);
             if (videiId == VideoType.none)
                 return false;
-            else
-                return true;
+            return true;
         }
 
         public static VideoId? TryParseVideoId(string query)

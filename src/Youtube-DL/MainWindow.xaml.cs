@@ -18,13 +18,13 @@ namespace Youtube_DL
         private void MouseCloseClick(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left)
-                this.Close();
+                Close();
         }
 
         private void MouseHideClick(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left && e.ClickCount == 2)
-                this.WindowState = WindowState.Minimized;
+                WindowState = WindowState.Minimized;
         }
     }
 }

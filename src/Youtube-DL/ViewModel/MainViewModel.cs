@@ -1,7 +1,7 @@
-﻿using MaterialDesignThemes.Wpf;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Windows;
+using MaterialDesignThemes.Wpf;
 using Youtube_DL.Core;
 using Youtube_DL.Model;
 using Youtube_DL.View;
@@ -10,25 +10,6 @@ namespace Youtube_DL.ViewModel
 {
     internal class MainViewModel : BaseViewModel
     {
-        #region Property
-
-        public bool Isloading { get; set; }
-        public bool ShowHsVideoText => MainVideoList.Count > 0;
-
-        public ISnackbarMessageQueue Notifications { get; } = new SnackbarMessageQueue(TimeSpan.FromSeconds(5));
-
-        public ObservableCollection<YoutubeVideoModel> MainVideoList { get; set; }
-
-        #endregion Property
-
-        #region Command
-
-        public Command _AddButton { get; }
-        public Command _AddToClipboard { get; }
-        public Command DeleteIteam { get; }
-
-        #endregion Command
-
         public MainViewModel()
         {
             MainVideoList = new ObservableCollection<YoutubeVideoModel>();
@@ -76,11 +57,26 @@ namespace Youtube_DL.ViewModel
 
         private void DeleteIteamVoid(object s)
         {
-            if (s is YoutubeVideoModel)
-            {
-                MainVideoList.Remove(s as YoutubeVideoModel);
-            }
+            if (s is YoutubeVideoModel) MainVideoList.Remove(s as YoutubeVideoModel);
         }
-    }
 
+        #region Property
+
+        public bool Isloading { get; set; }
+        public bool ShowHsVideoText => MainVideoList.Count > 0;
+
+        public ISnackbarMessageQueue Notifications { get; } = new SnackbarMessageQueue(TimeSpan.FromSeconds(5));
+
+        public ObservableCollection<YoutubeVideoModel> MainVideoList { get; set; }
+
+        #endregion Property
+
+        #region Command
+
+        public Command _AddButton { get; }
+        public Command _AddToClipboard { get; }
+        public Command DeleteIteam { get; }
+
+        #endregion Command
+    }
 }

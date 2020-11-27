@@ -1,19 +1,16 @@
-﻿using MaterialDesignThemes.Wpf;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using MaterialDesignThemes.Wpf;
 using Youtube_DL.Core;
 using Youtube_DL.Model;
-using YoutubeExplode;
 
 namespace Youtube_DL.ViewModel
 {
     internal class AddVideoPopupViewModel : BaseViewModel
     {
-        private YoutubeVideoService _youtubeservise;
-        public Command AddVideoCommand { get; }
-        public bool IsLoading { get; private set; }
+        private readonly YoutubeVideoService _youtubeservise;
 
         public AddVideoPopupViewModel()
         {
@@ -21,10 +18,13 @@ namespace Youtube_DL.ViewModel
             AddVideoCommand = new Command(AddVideoToList);
         }
 
+        public Command AddVideoCommand { get; }
+        public bool IsLoading { get; private set; }
+
         private async void AddVideoToList(object s)
         {
             if (IsLoading || string.IsNullOrWhiteSpace(s as string)) return;
-            string url = (string)s;
+            string url = (string) s;
 
             try
             {
@@ -32,13 +32,9 @@ namespace Youtube_DL.ViewModel
                 var videos = await _youtubeservise.GetVideosAsync(url);
                 IReadOnlyList<VideoDownloadOption>? videoOptions = null;
                 if (videos.Length == 1)
-                {
                     videoOptions = await _youtubeservise.GetVideoDownloadOptionsAsync(url);
-                }
                 else
-                {
                     videoOptions = YoutubeVideoService.GetOptionPlaylist().Reverse().ToArray();
-                }
                 IsLoading = false;
                 DialogHost.Close("MainDialog", new YoutubeVideoModel(videos, videoOptions));
             }
@@ -50,6 +46,7 @@ namespace Youtube_DL.ViewModel
             {
                 MessageBox.Show(e.Message);
             }
+
             IsLoading = false;
         }
     }

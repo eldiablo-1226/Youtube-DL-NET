@@ -5,7 +5,7 @@ namespace Youtube_DL.Helps
 {
     public static class FolderManager
     {
-        private static string[] _folderGuids = new string[]
+        private static readonly string[] _folderGuids =
         {
             "{56784854-C6CB-462B-8169-88E350ACB882}", // Contacts
             "{B4BFCC3A-DB2C-424C-B029-7FE99A87C641}", // Desktop
@@ -17,7 +17,7 @@ namespace Youtube_DL.Helps
             "{33E28130-4E1E-4676-835A-98395C3BC3BB}", // Pictures
             "{4C5C32FF-BB9D-43B0-B5B4-2D72E54EAAA4}", // SavedGames
             "{7D1D3A04-DEBB-4115-95CF-2F29DA2920DA}", // SavedSearches
-            "{18989B1D-99B5-455B-841C-AB7C74E4DDFC}", // Videos
+            "{18989B1D-99B5-455B-841C-AB7C74E4DDFC}" // Videos
         };
 
         public static string GetPath(FolderEnum folderEnum)
@@ -33,19 +33,17 @@ namespace Youtube_DL.Helps
         private static string GetPath(FolderEnum folderEnum, FolderFlags flags,
             bool defaultUser)
         {
-            int result = SHGetKnownFolderPath(new Guid(_folderGuids[(int)folderEnum]),
-                (uint)flags, new IntPtr(defaultUser ? -1 : 0), out IntPtr outPath);
+            var result = SHGetKnownFolderPath(new Guid(_folderGuids[(int) folderEnum]),
+                (uint) flags, new IntPtr(defaultUser ? -1 : 0), out var outPath);
             if (result >= 0)
             {
                 string path = Marshal.PtrToStringUni(outPath);
                 Marshal.FreeCoTaskMem(outPath);
                 return path;
             }
-            else
-            {
-                throw new ExternalException("Unable to retrieve the known folder path. It may not "
-                    + "be available on this system.", result);
-            }
+
+            throw new ExternalException("Unable to retrieve the known folder path. It may not "
+                                        + "be available on this system.", result);
         }
 
         [DllImport("Shell32.dll")]

@@ -14,8 +14,33 @@ namespace Youtube_DL.Model
     [Serializable]
     public class YoutubeVideoModel : BaseViewModel
     {
-        private YoutubeVideoService _youtubeService = new YoutubeVideoService();
+        private readonly Video[] Videos;
         private CancellationTokenSource? _cancellationToken = new CancellationTokenSource();
+        private YoutubeVideoService _youtubeService = new YoutubeVideoService();
+        public Video CurrerntVideo;
+
+        private Progress<double> progress;
+
+        public YoutubeVideoModel(Video[] video, IReadOnlyList<VideoDownloadOption> options)
+        {
+            OpenFile = new Command(OpenFilePath);
+            OpenFolder = new Command(OpenFolderPath);
+            Download = new Command(StartDownload);
+            CancelDownload = new Command(StopDownload);
+
+            progress = new Progress<double>(d => DownloadPercentage = d * 100);
+            IsPlaylist = video.Length > 1;
+
+            Videos = video;
+            CurrerntVideo = Videos.FirstOrDefault();
+
+            Image = CurrerntVideo?.Thumbnails.MaxResUrl ?? "";
+            Title = CurrerntVideo?.Title ?? "Unknow";
+
+            VideoOptions = options;
+            CurrerntVideoOption = VideoOptions.FirstOrDefault();
+        }
+
         public bool Isloading { get; set; }
         public bool Finished { get; set; }
 
@@ -30,8 +55,6 @@ namespace Youtube_DL.Model
 
         public double DownloadPercentage { get; set; }
 
-        private Progress<double> progress;
-
         public Command Download { get; set; }
         public Command CancelDownload { get; set; }
 
@@ -39,31 +62,8 @@ namespace Youtube_DL.Model
         public Command OpenFile { get; set; }
         public Command DeleteVideo { get; set; }
 
-        private readonly Video[] Videos;
-        public Video CurrerntVideo;
-
         public IReadOnlyList<VideoDownloadOption> VideoOptions { get; set; }
         public VideoDownloadOption CurrerntVideoOption { get; set; }
-
-        public YoutubeVideoModel(Video[] video, IReadOnlyList<VideoDownloadOption> options)
-        {
-            OpenFile = new Command(OpenFilePath);
-            OpenFolder = new Command(OpenFolderPath);
-            Download = new Command(StartDownload);
-            CancelDownload = new Command(StopDownload);
-
-            progress = new Progress<double>((d => DownloadPercentage = d * 100));
-            IsPlaylist = video.Length > 1;
-
-            Videos = video;
-            CurrerntVideo = Videos.FirstOrDefault();
-
-            Image = CurrerntVideo?.Thumbnails.MaxResUrl ?? "";
-            Title = CurrerntVideo?.Title ?? "Unknow";
-
-            VideoOptions = options;
-            CurrerntVideoOption = VideoOptions.FirstOrDefault();
-        }
 
         public async void StartDownload()
         {
@@ -73,13 +73,12 @@ namespace Youtube_DL.Model
             {
                 if (IsPlaylist)
                 {
-                    string? savePath = YoutubeVideoService.PromptDirectoryPath();
+                    var savePath = YoutubeVideoService.PromptDirectoryPath();
                     if (savePath == null) return;
                     SavedPath = savePath;
 
                     Isloading = true;
-                    for (int i = 0; i < Videos.Length; i++)
-                    {
+                    for (var i = 0; i < Videos.Length; i++)
                         try
                         {
                             PlaylistCount = $"{i + 1}/{Videos.Length}";
@@ -103,9 +102,9 @@ namespace Youtube_DL.Model
                         }
                         catch (Exception e)
                         {
-                            Console.WriteLine(e.Message);
+                            if (e.Message != "A task was canceled." && e.Message != "The operation was canceled.")
+                                Console.WriteLine(e.Message);
                         }
-                    }
 
                     Finished = true;
                 }
@@ -132,26 +131,24 @@ namespace Youtube_DL.Model
                 _cancellationToken?.Dispose();
                 _cancellationToken = null;
             }
-            
         }
 
-        public Task DownloadAsync(Video video, VideoDownloadOption option, string SaveFilePath) =>
-            _youtubeService.DownloadAsync(option, video, progress, _cancellationToken.Token, SaveFilePath);
+        public Task DownloadAsync(Video video, VideoDownloadOption option, string SaveFilePath)
+        {
+            return _youtubeService.DownloadAsync(option, video, progress, _cancellationToken.Token, SaveFilePath);
+        }
 
         public void StopDownload()
         {
-            if (Isloading)
-            {
-                _cancellationToken?.Cancel();
-            }
+            if (Isloading) _cancellationToken?.Cancel();
         }
 
         private void OpenFilePath()
         {
-            if(!IsPlaylist)
+            if (!IsPlaylist)
                 try
                 {
-                    new Process { StartInfo = new ProcessStartInfo(SavedPath) { UseShellExecute = true } }.Start();
+                    new Process {StartInfo = new ProcessStartInfo(SavedPath) {UseShellExecute = true}}.Start();
                 }
                 catch (Exception)
                 {

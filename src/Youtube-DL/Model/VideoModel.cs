@@ -8,27 +8,6 @@ namespace Youtube_DL.Model
 {
     public partial class VideoDownloadOption
     {
-        public bool IsPlaylist { get; }
-        public string Format { get; }
-        public string Label { get; }
-        public string Size { get; set; }
-
-        public IReadOnlyList<IStreamInfo>? StreamInfos { get; }
-
-        public VideoQuality? Quality =>
-            StreamInfos?.OfType<IVideoStreamInfo>()
-                .Select(s => s.VideoQuality)
-                .OrderByDescending(q => q)
-                .FirstOrDefault();
-
-        public VideoQualityPreference QualityPreference { get; }
-
-        public Framerate? Framerate =>
-            StreamInfos?.OfType<IVideoStreamInfo>()
-                .Select(s => s.Framerate)
-                .OrderByDescending(f => f)
-                .FirstOrDefault();
-
         public VideoDownloadOption(
             string format,
             string label,
@@ -55,9 +34,35 @@ namespace Youtube_DL.Model
             string label,
             string size,
             params IStreamInfo[] streamInfos)
-            : this(format, label, size, (IReadOnlyList<IStreamInfo>)streamInfos) { }
+            : this(format, label, size, (IReadOnlyList<IStreamInfo>) streamInfos)
+        {
+        }
 
-        public override string ToString() => $"{Label}  {Format}  {Size}";
+        public bool IsPlaylist { get; }
+        public string Format { get; }
+        public string Label { get; }
+        public string Size { get; set; }
+
+        public IReadOnlyList<IStreamInfo>? StreamInfos { get; }
+
+        public VideoQuality? Quality =>
+            StreamInfos?.OfType<IVideoStreamInfo>()
+                .Select(s => s.VideoQuality)
+                .OrderByDescending(q => q)
+                .FirstOrDefault();
+
+        public VideoQualityPreference QualityPreference { get; }
+
+        public Framerate? Framerate =>
+            StreamInfos?.OfType<IVideoStreamInfo>()
+                .Select(s => s.Framerate)
+                .OrderByDescending(f => f)
+                .FirstOrDefault();
+
+        public override string ToString()
+        {
+            return $"{Label}  {Format}  {Size}";
+        }
     }
 
     public partial class VideoDownloadOption : IEquatable<VideoDownloadOption>
@@ -78,12 +83,15 @@ namespace Youtube_DL.Model
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != GetType()) return false;
 
-            return Equals((VideoDownloadOption)obj);
+            return Equals((VideoDownloadOption) obj);
         }
 
-        public override int GetHashCode() => HashCode.Combine(
-            StringComparer.OrdinalIgnoreCase.GetHashCode(Format),
-            StringComparer.OrdinalIgnoreCase.GetHashCode(Label)
-        );
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(
+                StringComparer.OrdinalIgnoreCase.GetHashCode(Format),
+                StringComparer.OrdinalIgnoreCase.GetHashCode(Label)
+            );
+        }
     }
 }

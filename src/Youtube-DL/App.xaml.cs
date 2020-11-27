@@ -2,5 +2,7 @@
 
 namespace Youtube_DL
 {
-    public partial class App : Application { }
+    public partial class App : Application
+    {
+    }
 }
