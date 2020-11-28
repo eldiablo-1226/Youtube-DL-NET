@@ -1,17 +1,22 @@
 ﻿using System;
+using System.Drawing;
+using System.IO;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using Hardcodet.Wpf.TaskbarNotification;
+using Color = System.Windows.Media.Color;
 
 namespace Youtube_DL
 {
     public partial class MainWindow : Window
     {
+        private bool _firstShowBol = true; 
         public MainWindow()
         {
             InitializeComponent();
-            Loaded += (o, s) => NotifyIcon.IconSource = new BitmapImage(new Uri("pack://Youtube-DL:,,,/YoutubeIco.ico", UriKind.RelativeOrAbsolute));
+            Loaded += (o, s) => NotifyIcon.Icon = ToBitmapSource();
         }
 
 
@@ -33,6 +38,11 @@ namespace Youtube_DL
                 this.WindowState = WindowState.Minimized;
                 this.ShowInTaskbar = false;
                 NotifyIcon.Visibility = Visibility.Visible;
+                if (_firstShowBol)
+                {
+                    NotifyIcon.ShowBalloonTip("Youtube Downloader", "Приложения свернута в трей", BalloonIcon.Info);
+                    _firstShowBol = false;
+                }
             }
         }
 
@@ -48,16 +58,23 @@ namespace Youtube_DL
             Close();
         }
 
-        public static BitmapSource ToBitmapSource(DrawingImage source)
+        public Icon ToBitmapSource(DrawingImage? source = null)
         {
+            source ??= (DrawingImage)FindResource("YoutubeLogo");
             DrawingVisual drawingVisual = new DrawingVisual();
             DrawingContext drawingContext = drawingVisual.RenderOpen();
             drawingContext.DrawImage(source, new Rect(new System.Windows.Point(0, 0), new System.Windows.Size(source.Width, source.Height)));
             drawingContext.Close();
 
-            RenderTargetBitmap bmp = new RenderTargetBitmap((int)source.Width, (int)source.Height, 96, 96, PixelFormats.Pbgra32);
-            bmp.Render(drawingVisual);
-            return bmp;
+            RenderTargetBitmap rtb = new RenderTargetBitmap((int)source.Width, (int)source.Height, 96, 75, PixelFormats.Pbgra32);
+            rtb.Render(drawingVisual);
+
+            var encoder = new PngBitmapEncoder();
+            encoder.Frames.Add(BitmapFrame.Create(rtb));
+            MemoryStream stream = new MemoryStream();
+            encoder.Save(stream);
+            System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(stream);
+            return System.Drawing.Icon.FromHandle(bmp.GetHicon());
         }
     }
 }
