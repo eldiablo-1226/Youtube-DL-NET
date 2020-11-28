@@ -37,7 +37,7 @@ namespace Youtube_DL.Helps
                 (uint) flags, new IntPtr(defaultUser ? -1 : 0), out var outPath);
             if (result >= 0)
             {
-                string path = Marshal.PtrToStringUni(outPath);
+                string path = Marshal.PtrToStringUni(outPath) ?? throw new NullReferenceException("Marshal.PtrToStringUni(outPath)");
                 Marshal.FreeCoTaskMem(outPath);
                 return path;
             }

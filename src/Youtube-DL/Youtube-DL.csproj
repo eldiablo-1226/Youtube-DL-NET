@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net5.0-windows</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>Youtube_DL</RootNamespace>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>YoutubeIco.ico</ApplicationIcon>
