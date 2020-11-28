@@ -22,13 +22,13 @@ namespace Youtube_DL.Core
 
         public bool IsLoading;
 
-        public async Task DownloadAsync(VideoDownloadOption? videoOption, Video downloaVideo, Progress<double> progress,
+        public async Task DownloadAsync(VideoDownloadOption videoOption, Video downloaVideo, Progress<double> progress,
             CancellationToken cancellationToken, string fileName)
         {
-            if (videoOption == null)
+            if (videoOption.StreamInfos == null)
                 throw new InvalidOperationException($"Video '{downloaVideo.Id}' contains no streams.");
 
-            if (fileName == null) throw new ArgumentNullException("SelectPath");
+            if (fileName == null) throw new ArgumentNullException(nameof(fileName));
 
             var conversion = new ConversionRequestBuilder(fileName)
                 .SetFormat(videoOption.Format)
@@ -178,7 +178,7 @@ namespace Youtube_DL.Core
                 FileName = FixFileName(defaultFileName),
                 Filter = $"{filter} files|*.{filter}|All Files|*.*",
                 AddExtension = true,
-                DefaultExt = Path.GetExtension(defaultFileName) ?? ""
+                DefaultExt = Path.GetExtension(defaultFileName)
             };
             return dialog.ShowDialog() == true ? dialog.FileName : null;
         }

@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using Youtube_DL.Core;
+using Youtube_DL.Helps;
 using YoutubeExplode.Videos;
 
 namespace Youtube_DL.Model
@@ -14,32 +15,13 @@ namespace Youtube_DL.Model
     [Serializable]
     public class YoutubeVideoModel : BaseViewModel
     {
-        private readonly Video[] Videos;
+        private readonly Video[] _videos;
         private CancellationTokenSource? _cancellationToken = new CancellationTokenSource();
         private YoutubeVideoService _youtubeService = new YoutubeVideoService();
-        public Video CurrerntVideo;
+        public Video? CurrerntVideo;
 
-        private Progress<double> progress;
+        private Progress<double> _progress;
 
-        public YoutubeVideoModel(Video[] video, IReadOnlyList<VideoDownloadOption> options)
-        {
-            OpenFile = new Command(OpenFilePath);
-            OpenFolder = new Command(OpenFolderPath);
-            Download = new Command(StartDownload);
-            CancelDownload = new Command(StopDownload);
-
-            progress = new Progress<double>(d => DownloadPercentage = d * 100);
-            IsPlaylist = video.Length > 1;
-
-            Videos = video;
-            CurrerntVideo = Videos.FirstOrDefault();
-
-            Image = CurrerntVideo?.Thumbnails.MaxResUrl ?? "";
-            Title = CurrerntVideo?.Title ?? "Unknow";
-
-            VideoOptions = options;
-            CurrerntVideoOption = VideoOptions.FirstOrDefault();
-        }
 
         public bool Isloading { get; set; }
         public bool Finished { get; set; }
@@ -60,10 +42,31 @@ namespace Youtube_DL.Model
 
         public Command OpenFolder { get; set; }
         public Command OpenFile { get; set; }
-        public Command DeleteVideo { get; set; }
+        public Command? DeleteVideo { get; set; }
 
         public IReadOnlyList<VideoDownloadOption> VideoOptions { get; set; }
-        public VideoDownloadOption CurrerntVideoOption { get; set; }
+        public VideoDownloadOption? CurrerntVideoOption { get; set; }
+
+        public YoutubeVideoModel(Video[] video, IReadOnlyList<VideoDownloadOption> options)
+        {
+            OpenFile = new Command(OpenFilePath);
+            OpenFolder = new Command(OpenFolderPath);
+            Download = new Command(StartDownload);
+            CancelDownload = new Command(StopDownload);
+
+            _progress = new Progress<double>(d => DownloadPercentage = d * 100);
+            IsPlaylist = video.Length > 1;
+
+            _videos = video;
+            CurrerntVideo = _videos.FirstOrDefault();
+
+            Image = CurrerntVideo?.Thumbnails.MaxResUrl ?? "";
+            Title = CurrerntVideo?.Title ?? "Unknow";
+
+            VideoOptions = options;
+            CurrerntVideoOption = VideoOptions.FirstOrDefault();
+        }
+
 
         public async void StartDownload()
         {
@@ -78,24 +81,24 @@ namespace Youtube_DL.Model
                     SavedPath = savePath;
 
                     Isloading = true;
-                    for (var i = 0; i < Videos.Length; i++)
+                    for (var i = 0; i < _videos.Length; i++)
                         try
                         {
-                            PlaylistCount = $"{i + 1}/{Videos.Length}";
+                            PlaylistCount = $"{i + 1}/{_videos.Length}";
                             DownloadPercentage = 0;
                             IsIndeterminate = true;
 
-                            var options = await _youtubeService.TryGetBestVideoDownloadOptionAsync(Videos[i].Id,
+                            var options = await _youtubeService.TryGetBestVideoDownloadOptionAsync(_videos[i].Id,
                                 "mp4",
-                                CurrerntVideoOption.QualityPreference);
+                                CurrerntVideoOption?.QualityPreference ?? VideoQualityPreference.Maximum);
 
                             IsIndeterminate = false;
 
-                            await DownloadAsync(Videos[i], options,
-                                Path.Combine(savePath, YoutubeVideoService.FixFileName(Videos[i].Title) + ".mp4"));
-                            if (i + 1 < Videos.Length)
+                            await DownloadAsync(_videos[i], options ?? throw new NullReferenceException(),
+                                Path.Combine(savePath, YoutubeVideoService.FixFileName(_videos[i].Title) + ".mp4"));
+                            if (i + 1 < _videos.Length)
                             {
-                                CurrerntVideo = Videos[i + 1];
+                                CurrerntVideo = _videos[i + 1];
                                 Image = CurrerntVideo.Thumbnails.MaxResUrl;
                                 Title = CurrerntVideo.Title;
                             }
@@ -111,12 +114,12 @@ namespace Youtube_DL.Model
                 else
                 {
                     var savePath =
-                        YoutubeVideoService.PromptSaveFilePath(CurrerntVideo.Title, CurrerntVideoOption.Format);
+                        YoutubeVideoService.PromptSaveFilePath(CurrerntVideo?.Title ?? "Unknow", CurrerntVideoOption?.Format ?? "Unknow");
                     SavedPath = savePath;
                     if (savePath == null) return;
 
                     Isloading = true;
-                    await DownloadAsync(CurrerntVideo, CurrerntVideoOption, savePath);
+                    await DownloadAsync(CurrerntVideo ?? throw new NullReferenceException(), CurrerntVideoOption ?? throw new NullReferenceException(), savePath);
                     Finished = true;
                 }
             }
@@ -133,9 +136,9 @@ namespace Youtube_DL.Model
             }
         }
 
-        public Task DownloadAsync(Video video, VideoDownloadOption option, string SaveFilePath)
+        public Task DownloadAsync(Video video, VideoDownloadOption option, string saveFilePath)
         {
-            return _youtubeService.DownloadAsync(option, video, progress, _cancellationToken.Token, SaveFilePath);
+            return _youtubeService.DownloadAsync(option, video, _progress, _cancellationToken?.Token ?? throw new NullReferenceException(), saveFilePath);
         }
 
         public void StopDownload()

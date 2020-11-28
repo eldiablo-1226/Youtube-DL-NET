@@ -14,26 +14,26 @@ namespace Youtube_DL.ViewModel
         {
             MainVideoList = new ObservableCollection<YoutubeVideoModel>();
 
-            /// Command
-            _AddButton = new Command(AddViewShow);
-            _AddToClipboard = new Command(AddToClipboard);
+            // Command
+            AddButton = new Command(AddViewShow);
+            AddToClipboard = new Command(AddClipboard);
             DeleteIteam = new Command(DeleteIteamVoid);
 
             MainVideoList.CollectionChanged += (o, s) => OnPropertyChanged(nameof(ShowHsVideoText));
         }
 
-        private async void AddToClipboard()
+        private async void AddClipboard()
         {
             if (Clipboard.ContainsText())
             {
-                string ClipBoardText = Clipboard.GetText();
+                string clipBoardText = Clipboard.GetText();
 
-                var videoInfo = await DialogHost.Show(new LoadingView(ClipBoardText));
+                var videoInfo = await DialogHost.Show(new LoadingView(clipBoardText));
 
                 if (videoInfo == null) return;
-                var Info = videoInfo as YoutubeVideoModel;
-                Info.DeleteVideo = DeleteIteam;
-                MainVideoList.Add(Info);
+                YoutubeVideoModel info = (YoutubeVideoModel)videoInfo;
+                info.DeleteVideo = DeleteIteam;
+                MainVideoList.Add(info);
             }
         }
 
@@ -45,9 +45,9 @@ namespace Youtube_DL.ViewModel
 
                 if (videoInfo == null) return;
 
-                var Info = videoInfo as YoutubeVideoModel;
-                Info.DeleteVideo = DeleteIteam;
-                MainVideoList.Add(Info);
+                YoutubeVideoModel info = (YoutubeVideoModel)videoInfo;
+                info.DeleteVideo = DeleteIteam;
+                MainVideoList.Add(info);
             }
             catch (Exception e)
             {
@@ -57,7 +57,7 @@ namespace Youtube_DL.ViewModel
 
         private void DeleteIteamVoid(object s)
         {
-            if (s is YoutubeVideoModel) MainVideoList.Remove(s as YoutubeVideoModel);
+            if (s is YoutubeVideoModel) MainVideoList.Remove((YoutubeVideoModel)s);
         }
 
         #region Property
@@ -73,8 +73,8 @@ namespace Youtube_DL.ViewModel
 
         #region Command
 
-        public Command _AddButton { get; }
-        public Command _AddToClipboard { get; }
+        public Command AddButton { get; }
+        public Command AddToClipboard { get; }
         public Command DeleteIteam { get; }
 
         #endregion Command

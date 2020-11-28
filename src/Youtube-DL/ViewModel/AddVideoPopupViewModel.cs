@@ -30,7 +30,7 @@ namespace Youtube_DL.ViewModel
             {
                 IsLoading = true;
                 var videos = await _youtubeservise.GetVideosAsync(url);
-                IReadOnlyList<VideoDownloadOption>? videoOptions = null;
+                IReadOnlyList<VideoDownloadOption>? videoOptions;
                 if (videos.Length == 1)
                     videoOptions = await _youtubeservise.GetVideoDownloadOptionsAsync(url);
                 else
