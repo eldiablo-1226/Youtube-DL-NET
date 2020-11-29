@@ -33,9 +33,7 @@
     <Content Include="ffmpeg.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="YoutubeIco.ico">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Content Include="YoutubeIco.ico" />
   </ItemGroup>
 
   <ItemGroup>
