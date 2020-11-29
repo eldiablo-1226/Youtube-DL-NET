@@ -5,20 +5,28 @@ VisualStudioVersion = 16.0.30621.155
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Youtube-DL", "Youtube-DL.csproj", "{3ED91976-AC4D-4F69-B96D-0B8DFD36697B}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Youtube Installer", "..\Youtube Installer\Youtube Installer.vdproj", "{F29C7390-85FD-47A0-BF13-758B0651A7AC}"
+Project("{840C416C-B8F3-42BC-B0DD-F6BB14C9F8CB}") = "Youtube Setup", "..\Youtube Setup\Youtube Setup.aiproj", "{90C8BC17-3905-425D-B3EB-7E6BF2EB1A3B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		All|Any CPU = All|Any CPU
 		Debug|Any CPU = Debug|Any CPU
+		DefaultBuild|Any CPU = DefaultBuild|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3ED91976-AC4D-4F69-B96D-0B8DFD36697B}.All|Any CPU.ActiveCfg = Release|Any CPU
+		{3ED91976-AC4D-4F69-B96D-0B8DFD36697B}.All|Any CPU.Build.0 = Release|Any CPU
 		{3ED91976-AC4D-4F69-B96D-0B8DFD36697B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3ED91976-AC4D-4F69-B96D-0B8DFD36697B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3ED91976-AC4D-4F69-B96D-0B8DFD36697B}.DefaultBuild|Any CPU.ActiveCfg = Debug|Any CPU
+		{3ED91976-AC4D-4F69-B96D-0B8DFD36697B}.DefaultBuild|Any CPU.Build.0 = Debug|Any CPU
 		{3ED91976-AC4D-4F69-B96D-0B8DFD36697B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3ED91976-AC4D-4F69-B96D-0B8DFD36697B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F29C7390-85FD-47A0-BF13-758B0651A7AC}.Debug|Any CPU.ActiveCfg = Debug
-		{F29C7390-85FD-47A0-BF13-758B0651A7AC}.Release|Any CPU.ActiveCfg = Release
+		{90C8BC17-3905-425D-B3EB-7E6BF2EB1A3B}.All|Any CPU.ActiveCfg = DefaultBuild
+		{90C8BC17-3905-425D-B3EB-7E6BF2EB1A3B}.Debug|Any CPU.ActiveCfg = DefaultBuild
+		{90C8BC17-3905-425D-B3EB-7E6BF2EB1A3B}.DefaultBuild|Any CPU.ActiveCfg = DefaultBuild
+		{90C8BC17-3905-425D-B3EB-7E6BF2EB1A3B}.Release|Any CPU.ActiveCfg = DefaultBuild
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
