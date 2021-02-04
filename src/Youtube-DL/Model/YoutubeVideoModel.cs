@@ -32,6 +32,7 @@ namespace Youtube_DL.Model
         public string Image { get; set; }
         public string Title { get; set; }
         public string PlaylistCount { get; set; } = "";
+        public string? PlaylistTitle { get; set; }
 
         public string? SavedPath { get; set; }
 
@@ -47,7 +48,7 @@ namespace Youtube_DL.Model
         public IReadOnlyList<VideoDownloadOption> VideoOptions { get; set; }
         public VideoDownloadOption? CurrerntVideoOption { get; set; }
 
-        public YoutubeVideoModel(Video[] video, IReadOnlyList<VideoDownloadOption> options)
+        public YoutubeVideoModel(Video[] video, IReadOnlyList<VideoDownloadOption> options, string? playlistTitle = null)
         {
             OpenFile = new Command(OpenFilePath);
             OpenFolder = new Command(OpenFolderPath);
@@ -62,6 +63,7 @@ namespace Youtube_DL.Model
 
             Image = CurrerntVideo?.Thumbnails.MaxResUrl ?? "";
             Title = CurrerntVideo?.Title ?? "Unknow";
+            PlaylistTitle = playlistTitle;
 
             VideoOptions = options;
             CurrerntVideoOption = VideoOptions.FirstOrDefault();
@@ -78,8 +80,9 @@ namespace Youtube_DL.Model
                 {
                     var savePath = YoutubeVideoService.PromptDirectoryPath();
                     if (savePath == null) return;
-                    SavedPath = savePath;
-
+                    string fullpath = Path.Combine(savePath, YoutubeVideoService.FixFileName(PlaylistTitle!));
+                    Directory.CreateDirectory(fullpath);
+                    SavedPath = fullpath;
                     Isloading = true;
                     for (var i = 0; i < _videos.Length; i++)
                         try
@@ -95,7 +98,7 @@ namespace Youtube_DL.Model
                             IsIndeterminate = false;
 
                             await DownloadAsync(_videos[i], options ?? throw new NullReferenceException(),
-                                Path.Combine(savePath, YoutubeVideoService.FixFileName(_videos[i].Title) + ".mp4"));
+                                Path.Combine(fullpath, YoutubeVideoService.FixFileName(_videos[i].Title) + ".mp4"));
                             if (i + 1 < _videos.Length)
                             {
                                 CurrerntVideo = _videos[i + 1];

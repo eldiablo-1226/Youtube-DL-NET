@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.30621.155
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Youtube-DL", "Youtube-DL.csproj", "{3ED91976-AC4D-4F69-B96D-0B8DFD36697B}"
 EndProject
-Project("{840C416C-B8F3-42BC-B0DD-F6BB14C9F8CB}") = "Youtube Setup", "..\Youtube Setup\Youtube Setup.aiproj", "{90C8BC17-3905-425D-B3EB-7E6BF2EB1A3B}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		All|Any CPU = All|Any CPU
@@ -23,10 +21,6 @@ Global
 		{3ED91976-AC4D-4F69-B96D-0B8DFD36697B}.DefaultBuild|Any CPU.Build.0 = Debug|Any CPU
 		{3ED91976-AC4D-4F69-B96D-0B8DFD36697B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3ED91976-AC4D-4F69-B96D-0B8DFD36697B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{90C8BC17-3905-425D-B3EB-7E6BF2EB1A3B}.All|Any CPU.ActiveCfg = DefaultBuild
-		{90C8BC17-3905-425D-B3EB-7E6BF2EB1A3B}.Debug|Any CPU.ActiveCfg = DefaultBuild
-		{90C8BC17-3905-425D-B3EB-7E6BF2EB1A3B}.DefaultBuild|Any CPU.ActiveCfg = DefaultBuild
-		{90C8BC17-3905-425D-B3EB-7E6BF2EB1A3B}.Release|Any CPU.ActiveCfg = DefaultBuild
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

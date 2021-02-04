@@ -32,12 +32,17 @@ namespace Youtube_DL.View
                 if (_url == null) throw new NullReferenceException(nameof(_url));
                 var videos = await VideoService.GetVideosAsync(_url);
                 IReadOnlyList<VideoDownloadOption>? videoOptions;
+                string? title = default;
+
                 if (videos.Length == 1)
                     videoOptions = await VideoService.GetVideoDownloadOptionsAsync(_url);
                 else
+                {
                     videoOptions = YoutubeVideoService.GetOptionPlaylist().Reverse().ToArray();
+                    title = await VideoService.GetPlaylistTitle(_url);
+                }
 
-                DialogHost.Close("MainDialog", new YoutubeVideoModel(videos, videoOptions));
+                DialogHost.Close("MainDialog", new YoutubeVideoModel(videos, videoOptions, title));
             }
             catch (Exception)
             {

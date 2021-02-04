@@ -143,6 +143,8 @@ namespace Youtube_DL.Core
                 orderedOptions.FirstOrDefault(o => string.Equals(o.Format, format, StringComparison.OrdinalIgnoreCase));
         }
 
+        public async Task<string> GetPlaylistTitle(string url) => (await _youtube.Playlists.GetAsync(url)).Title;
+
         public async Task<Video[]> GetVideosAsync(string url)
         {
             var typeInfo = TryParce(url);
