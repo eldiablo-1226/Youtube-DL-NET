@@ -12,7 +12,7 @@ namespace Youtube_DL.Core
             _execute = execute ?? throw new ArgumentNullException(nameof(execute));
         }
 
-        public Command(Action execute) : this(o => execute())
+        public Command(Action execute) : this(_ => execute())
         {
             if (execute == null)
                 throw new ArgumentNullException(nameof(execute));

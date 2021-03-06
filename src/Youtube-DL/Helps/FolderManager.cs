@@ -33,8 +33,8 @@ namespace Youtube_DL.Helps
         private static string GetPath(FolderEnum folderEnum, FolderFlags flags,
             bool defaultUser)
         {
-            var result = SHGetKnownFolderPath(new Guid(_folderGuids[(int) folderEnum]),
-                (uint) flags, new IntPtr(defaultUser ? -1 : 0), out var outPath);
+            var result = SHGetKnownFolderPath(new Guid(_folderGuids[(int)folderEnum]),
+                (uint)flags, new IntPtr(defaultUser ? -1 : 0), out var outPath);
             if (result >= 0)
             {
                 string path = Marshal.PtrToStringUni(outPath) ?? throw new NullReferenceException("Marshal.PtrToStringUni(outPath)");

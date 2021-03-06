@@ -34,8 +34,7 @@
                     CommandParameter="{Binding Path=Text, ElementName=UrlTextBox}"
                     Style="{StaticResource MaterialDesignFlatButton}">
                     <Grid>
-                        <TextBlock Text="Добавить"
-                                   Visibility="{Binding IsLoading, Converter={StaticResource InverseBoolToVisConverter}}" />
+                        <TextBlock Text="Добавить" Visibility="{Binding IsLoading, Converter={StaticResource InverseBoolToVisConverter}}" />
                         <ProgressBar
                             IsIndeterminate="True"
                             Style="{StaticResource MaterialDesignCircularProgressBar}"

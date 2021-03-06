@@ -1,13 +1,17 @@
-﻿using System;
+﻿using Microsoft.Win32;
+
+using Ookii.Dialogs.Wpf;
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Win32;
-using Ookii.Dialogs.Wpf;
+
 using Youtube_DL.Helps;
 using Youtube_DL.Model;
+
 using YoutubeExplode;
 using YoutubeExplode.Converter;
 using YoutubeExplode.Playlists;
@@ -152,7 +156,7 @@ namespace Youtube_DL.Core
             {
                 if (typeInfo == VideoType.Video)
                 {
-                    var videos = new[] {await _youtube.Videos.GetAsync(url)};
+                    var videos = new[] { await _youtube.Videos.GetAsync(url) };
                     return videos;
                 }
 

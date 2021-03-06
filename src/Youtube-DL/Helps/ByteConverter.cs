@@ -13,9 +13,9 @@ namespace Youtube_DL.Helps
             if (value < 0) return "-" + SizeSuffix(-value);
             if (value == 0) return string.Format("{0:n" + decimalPlaces + "} bytes", 0);
 
-            var mag = (int) Math.Log(value, 1024);
+            var mag = (int)Math.Log(value, 1024);
 
-            var adjustedSize = (decimal) value / (1L << (mag * 10));
+            var adjustedSize = (decimal)value / (1L << (mag * 10));
 
             if (Math.Round(adjustedSize, decimalPlaces) >= 1000)
             {

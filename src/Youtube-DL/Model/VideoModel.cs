@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using Youtube_DL.Helps;
+
 using YoutubeExplode.Videos.Streams;
 
 namespace Youtube_DL.Model
@@ -34,7 +36,7 @@ namespace Youtube_DL.Model
             string label,
             string size,
             params IStreamInfo[] streamInfos)
-            : this(format, label, size, (IReadOnlyList<IStreamInfo>) streamInfos)
+            : this(format, label, size, (IReadOnlyList<IStreamInfo>)streamInfos)
         {
         }
 
@@ -83,7 +85,7 @@ namespace Youtube_DL.Model
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != GetType()) return false;
 
-            return Equals((VideoDownloadOption) obj);
+            return Equals((VideoDownloadOption)obj);
         }
 
         public override int GetHashCode()

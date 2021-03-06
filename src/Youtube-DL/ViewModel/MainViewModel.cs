@@ -1,7 +1,9 @@
-﻿using System;
+﻿using MaterialDesignThemes.Wpf;
+
+using System;
 using System.Collections.ObjectModel;
 using System.Windows;
-using MaterialDesignThemes.Wpf;
+
 using Youtube_DL.Core;
 using Youtube_DL.Model;
 using Youtube_DL.View;

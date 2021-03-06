@@ -1,8 +1,10 @@
-﻿using System;
+﻿using MaterialDesignThemes.Wpf;
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
-using MaterialDesignThemes.Wpf;
+
 using Youtube_DL.Core;
 using Youtube_DL.Model;
 
@@ -24,7 +26,7 @@ namespace Youtube_DL.ViewModel
         private async void AddVideoToList(object s)
         {
             if (IsLoading || string.IsNullOrWhiteSpace(s as string)) return;
-            string url = (string) s;
+            string url = (string)s;
 
             try
             {

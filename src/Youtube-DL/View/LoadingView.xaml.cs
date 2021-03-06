@@ -1,8 +1,10 @@
-﻿using System;
+﻿using MaterialDesignThemes.Wpf;
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
-using MaterialDesignThemes.Wpf;
+
 using Youtube_DL.Core;
 using Youtube_DL.Model;
 

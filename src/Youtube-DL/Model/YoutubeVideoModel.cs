@@ -6,8 +6,10 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+
 using Youtube_DL.Core;
 using Youtube_DL.Helps;
+
 using YoutubeExplode.Videos;
 
 namespace Youtube_DL.Model
@@ -21,7 +23,6 @@ namespace Youtube_DL.Model
         public Video? CurrerntVideo;
 
         private Progress<double> _progress;
-
 
         public bool Isloading { get; set; }
         public bool Finished { get; set; }
@@ -68,7 +69,6 @@ namespace Youtube_DL.Model
             VideoOptions = options;
             CurrerntVideoOption = VideoOptions.FirstOrDefault();
         }
-
 
         public async void StartDownload()
         {
@@ -154,7 +154,7 @@ namespace Youtube_DL.Model
             if (!IsPlaylist)
                 try
                 {
-                    new Process {StartInfo = new ProcessStartInfo(SavedPath) {UseShellExecute = true}}.Start();
+                    new Process { StartInfo = new ProcessStartInfo(SavedPath) { UseShellExecute = true } }.Start();
                 }
                 catch (Exception)
                 {

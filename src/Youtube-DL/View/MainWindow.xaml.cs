@@ -1,24 +1,23 @@
-﻿using System;
+﻿using Hardcodet.Wpf.TaskbarNotification;
+
 using System.Drawing;
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using Hardcodet.Wpf.TaskbarNotification;
-using Color = System.Windows.Media.Color;
 
 namespace Youtube_DL
 {
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
-        private bool _firstShowBol = true; 
+        private bool _firstShowBol = true;
+
         public MainWindow()
         {
             InitializeComponent();
             Loaded += (o, s) => NotifyIcon.Icon = ToBitmapSource();
         }
-
 
         private void MouseMoveWindow(object sender, MouseButtonEventArgs e)
         {
@@ -35,8 +34,8 @@ namespace Youtube_DL
         {
             if (e.ChangedButton == MouseButton.Left && e.ClickCount == 2)
             {
-                this.WindowState = WindowState.Minimized;
-                this.ShowInTaskbar = false;
+                WindowState = WindowState.Minimized;
+                ShowInTaskbar = false;
                 NotifyIcon.Visibility = Visibility.Visible;
                 if (_firstShowBol)
                 {
@@ -48,8 +47,8 @@ namespace Youtube_DL
 
         private void OpenWindow(object sender, RoutedEventArgs e)
         {
-            this.WindowState = WindowState.Normal;
-            this.ShowInTaskbar = true;
+            WindowState = WindowState.Normal;
+            ShowInTaskbar = true;
             NotifyIcon.Visibility = Visibility.Hidden;
         }
 
@@ -73,7 +72,7 @@ namespace Youtube_DL
             encoder.Frames.Add(BitmapFrame.Create(rtb));
             MemoryStream stream = new MemoryStream();
             encoder.Save(stream);
-            System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(stream);
+            Bitmap bmp = new Bitmap(stream);
             return System.Drawing.Icon.FromHandle(bmp.GetHicon());
         }
     }

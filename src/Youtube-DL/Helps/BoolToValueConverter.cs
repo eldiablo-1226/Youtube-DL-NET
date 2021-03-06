@@ -11,7 +11,7 @@ namespace Youtube_DL.Helps
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if(NullOrFalseValue != null && TrueValue != null)
+            if (NullOrFalseValue != null && TrueValue != null)
                 return value == null || !System.Convert.ToBoolean(value, CultureInfo.InvariantCulture)
                     ? NullOrFalseValue
                     : TrueValue;
