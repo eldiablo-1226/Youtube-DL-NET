@@ -28,6 +28,6 @@ namespace Youtube_DL.Core
             _execute(parameter);
         }
 
-        public event EventHandler CanExecuteChanged;
+        public event EventHandler CanExecuteChanged = null!;
     }
 }
